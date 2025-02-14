@@ -1,5 +1,4 @@
 ﻿using AdminIvoire.Domain.Entite;
-using System.Threading;
 
 namespace AdminIvoire.Domain.Repository.Write;
 
