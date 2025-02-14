@@ -6,29 +6,32 @@ namespace AdminIvoire.Infrastructure.Persistence.Repository.Read;
 
 public class DepartementReadRepository(LocaliteContext dbContext) : LocaliteReadRepository<Departement>(dbContext), IDepartementReadRepository
 {
-    public async Task<IList<Departement>> GetAllByRegionId(Guid regionId)
+    public async Task<IList<Departement>> GetAllByRegionIdAsync(Guid regionId, CancellationToken cancellationToken)
     {
         return await DbContext.Departements
             .Include(d => d.Communes.Count)
             .Include(d => d.SousPrefectures.Count)
+            .AsNoTracking()
             .Where(x => x.RegionId == regionId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public override async Task<Departement> GetById(Guid id)
+    public override async Task<Departement> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await DbContext.Departements
             .Include(d => d.Communes)
             .Include(d => d.SousPrefectures)
-            .FirstOrDefaultAsync(x => x.Id == id)
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken)
             ?? throw new DataException($"Aucun département avec id {id} n'a été trouvé.");
     }
 
-    public override async Task<IList<Departement>> GetAll()
+    public override async Task<IList<Departement>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await DbContext.Departements
             .Include(d => d.Communes.Count)
             .Include(d => d.SousPrefectures.Count)
-            .ToListAsync();
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
     }
 }

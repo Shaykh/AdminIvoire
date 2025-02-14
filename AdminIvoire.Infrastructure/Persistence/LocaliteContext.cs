@@ -3,12 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AdminIvoire.Infrastructure.Persistence;
 
-public class LocaliteContext : DbContext
+public class LocaliteContext(DbContextOptions<LocaliteContext> options) : DbContext(options)
 {
-    public LocaliteContext(DbContextOptions<LocaliteContext> options) : base(options)
-    {
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(LocaliteContext).Assembly);

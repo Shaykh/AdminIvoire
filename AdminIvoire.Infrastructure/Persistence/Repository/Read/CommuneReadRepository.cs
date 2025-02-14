@@ -6,19 +6,21 @@ namespace AdminIvoire.Infrastructure.Persistence.Repository.Read;
 
 public class CommuneReadRepository(LocaliteContext dbContext) : LocaliteReadRepository<Commune>(dbContext), ICommuneReadRepository
 {
-    public async Task<IList<Commune>> GetAllByDepartementId(Guid departementId)
+    public async Task<IList<Commune>> GetAllByDepartementIdAsync(Guid departementId, CancellationToken cancellationToken)
     {
         return await DbContext.Communes
             .Include(c => c.Villages.Count)
+            .AsNoTracking()
             .Where(x => x.DepartementId == departementId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public override async Task<Commune> GetById(Guid id)
+    public override async Task<Commune> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await DbContext.Communes
             .Include(c => c.Villages)
-            .FirstOrDefaultAsync(x => x.Id == id)
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken)
             ?? throw new DataException($"Aucune commune avec id {id} n'a été trouvée.");
     }
 }

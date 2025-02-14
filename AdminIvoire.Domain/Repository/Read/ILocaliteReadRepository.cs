@@ -4,6 +4,6 @@ namespace AdminIvoire.Domain.Repository.Read;
 
 public interface ILocaliteReadRepository<T> where T : Localite
 {
-    Task<IList<T>> GetAll();
-    Task<T> GetById(Guid id);
+    Task<IList<T>> GetAllAsync(CancellationToken cancellationToken);
+    Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 }

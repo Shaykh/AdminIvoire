@@ -4,5 +4,5 @@ namespace AdminIvoire.Domain.Repository.Read;
 
 public interface IDepartementReadRepository : ILocaliteReadRepository<Departement>
 {
-    Task<IList<Departement>> GetAllByRegionId(Guid regionId);
+    Task<IList<Departement>> GetAllByRegionIdAsync(Guid regionId, CancellationToken cancellationToken);
 }

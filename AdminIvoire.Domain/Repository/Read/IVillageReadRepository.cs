@@ -4,5 +4,5 @@ namespace AdminIvoire.Domain.Repository.Read;
 
 public interface IVillageReadRepository : ILocaliteReadRepository<Village>
 {
-    Task<IList<Village>> GetAllBySousPrefectureId(Guid sousPrefectureId);
+    Task<IList<Village>> GetAllBySousPrefectureIdAsync(Guid sousPrefectureId, CancellationToken cancellationToken);
 }

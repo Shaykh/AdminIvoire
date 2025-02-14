@@ -6,26 +6,29 @@ namespace AdminIvoire.Infrastructure.Persistence.Repository.Read;
 
 public class RegionReadRepository(LocaliteContext dbContext) : LocaliteReadRepository<Region>(dbContext), IRegionReadRepository
 {
-    public async Task<IList<Region>> GetAllByDistrictId(Guid districtId)
+    public async Task<IList<Region>> GetAllByDistrictIdAsync(Guid districtId, CancellationToken cancellationToken)
     {
         return await DbContext.Regions
             .Include(r => r.Departements.Count)
+            .AsNoTracking()
             .Where(x => x.DistrictId == districtId)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
-    public override async Task<Region> GetById(Guid id)
+    public override async Task<Region> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await DbContext.Regions
             .Include(r => r.Departements)
-            .FirstOrDefaultAsync(x => x.Id == id)
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken)
             ?? throw new DataException($"Aucune région avec id {id} n'a été trouvée.");
     }
 
-    public override async Task<IList<Region>> GetAll()
+    public override async Task<IList<Region>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await DbContext.Regions
             .Include(r => r.Departements.Count)
-            .ToListAsync();
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
     }
 }
