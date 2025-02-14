@@ -1,7 +1,7 @@
 ﻿using AdminIvoire.Domain.Entite;
-using AdminIvoire.Domain.Repository;
+using AdminIvoire.Domain.Repository.Write;
 
-namespace AdminIvoire.Infrastructure.Persistence.Repository;
+namespace AdminIvoire.Infrastructure.Persistence.Repository.Write;
 
 public abstract class LocaliteWriteRepository<T>(LocaliteContext dbContext) : ILocaliteWriteRepository<T> where T : Localite
 {
