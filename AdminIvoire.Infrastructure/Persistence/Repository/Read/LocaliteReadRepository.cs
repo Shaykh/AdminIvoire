@@ -21,4 +21,11 @@ public abstract class LocaliteReadRepository<T>(LocaliteContext dbContext) where
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken)
             ?? throw new DataException($"Aucune entité de type {typeof(T).Name} avec id {id} n'a été trouvée.");
     }
+
+    public virtual async Task<T?> GetByNomAsync(string nom, CancellationToken cancellationToken)
+    {
+        return await DbContext.Set<T>()
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Nom == nom, cancellationToken);
+    }
 }

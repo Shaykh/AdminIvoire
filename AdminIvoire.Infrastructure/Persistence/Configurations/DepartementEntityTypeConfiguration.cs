@@ -9,6 +9,7 @@ public class DepartementEntityTypeConfiguration : IEntityTypeConfiguration<Depar
     public void Configure(EntityTypeBuilder<Departement> builder)
     {
         builder.HasKey(d => d.Id);
+        builder.HasIndex(d => d.Nom).IsUnique();
         builder.Property(d => d.Nom).IsRequired();
         builder.HasOne(d => d.Region)
                .WithMany(r => r.Departements)

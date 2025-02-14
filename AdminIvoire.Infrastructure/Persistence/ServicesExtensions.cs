@@ -1,5 +1,7 @@
-﻿using AdminIvoire.Domain.Repository.Read;
+﻿using AdminIvoire.Domain.Repository;
+using AdminIvoire.Domain.Repository.Read;
 using AdminIvoire.Domain.Repository.Write;
+using AdminIvoire.Infrastructure.Persistence.Repository;
 using AdminIvoire.Infrastructure.Persistence.Repository.Read;
 using AdminIvoire.Infrastructure.Persistence.Repository.Write;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +17,7 @@ public static class ServicesExtensions
     /// <returns></returns>
     public static IServiceCollection AddPersistence(this IServiceCollection services)
     {
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services
             .AddReadRepositories()
             .AddWriteRepositories();

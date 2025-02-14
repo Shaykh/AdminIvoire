@@ -9,6 +9,7 @@ public class DistrictEntityTypeConfiguration : IEntityTypeConfiguration<District
     public void Configure(EntityTypeBuilder<District> builder)
     {
         builder.HasKey(d => d.Id);
+        builder.HasIndex(d => d.Nom).IsUnique();
         builder.Property(d => d.Nom).IsRequired();
     }
 }
