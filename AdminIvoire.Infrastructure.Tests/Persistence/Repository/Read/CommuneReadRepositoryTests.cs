@@ -2,7 +2,6 @@
 using AdminIvoire.Infrastructure.Persistence;
 using AdminIvoire.Infrastructure.Persistence.Repository.Read;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace AdminIvoire.Infrastructure.Tests.Persistence.Repository.Read;
 
@@ -91,6 +90,24 @@ public class CommuneReadRepositoryTests
     }
 
     [Fact]
+    public async Task GivenGetAllByDepartementIdAsync_WhenNoCommuneWithDepartementId_ThenReturnEmptyList()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<LocaliteContext>()
+            .UseInMemoryDatabase(databaseName: nameof(GivenGetAllByDepartementIdAsync_WhenNoCommuneWithDepartementId_ThenReturnEmptyList))
+            .Options;
+        using var context = new LocaliteContext(options);
+        var sut = new CommuneReadRepository(context);
+        await SetCommunesForTest(context);
+
+        //Act
+        var result = await sut.GetAllByDepartementIdAsync(Guid.NewGuid(), CancellationToken.None);
+
+        //Assert
+        Assert.Empty(result);
+    }
+
+    [Fact]
     public async Task GivenGetAlldAsync_WhenExistingCommunes_ThenReturnEntities()
     {
         //Arrange
@@ -107,6 +124,23 @@ public class CommuneReadRepositoryTests
         //Assert
         Assert.NotEmpty(result);
         Assert.Equal(communes.Count + 1, result.Count);
+    }
+
+    [Fact]
+    public async Task GivenGetAllAsync_WhenNoCommune_ThenReturnEmptyList()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<LocaliteContext>()
+            .UseInMemoryDatabase(databaseName: nameof(GivenGetAllAsync_WhenNoCommune_ThenReturnEmptyList))
+            .Options;
+        using var context = new LocaliteContext(options);
+        var sut = new CommuneReadRepository(context);
+
+        //Act
+        var result = await sut.GetAllAsync(CancellationToken.None);
+
+        //Assert
+        Assert.Empty(result);
     }
 
     [Fact]
