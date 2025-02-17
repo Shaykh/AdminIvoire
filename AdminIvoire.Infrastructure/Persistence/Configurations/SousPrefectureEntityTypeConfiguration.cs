@@ -13,5 +13,6 @@ public class SousPrefectureEntityTypeConfiguration : IEntityTypeConfiguration<So
         builder.HasOne(sp => sp.Departement)
                .WithMany(d => d.SousPrefectures)
                .HasForeignKey(sp => sp.DepartementId);
+        builder.OwnsOne(r => r.CoordonneesGeographiques);
     }
 }

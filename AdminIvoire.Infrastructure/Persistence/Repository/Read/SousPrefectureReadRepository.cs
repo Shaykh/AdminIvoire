@@ -9,7 +9,6 @@ public class SousPrefectureReadRepository(LocaliteContext dbContext) : LocaliteR
     public async Task<IList<SousPrefecture>> GetAllByDepartementIdAsync(Guid departementId, CancellationToken cancellationToken)
     {
         return await DbContext.SousPrefectures
-            .Include(sp => sp.Villages.Count)
             .AsNoTracking()
             .Where(x => x.DepartementId == departementId)
             .ToListAsync(cancellationToken);

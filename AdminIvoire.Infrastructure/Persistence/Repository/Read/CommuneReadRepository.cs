@@ -9,7 +9,6 @@ public class CommuneReadRepository(LocaliteContext dbContext) : LocaliteReadRepo
     public async Task<IList<Commune>> GetAllByDepartementIdAsync(Guid departementId, CancellationToken cancellationToken)
     {
         return await DbContext.Communes
-            .Include(c => c.Villages.Count)
             .AsNoTracking()
             .Where(x => x.DepartementId == departementId)
             .ToListAsync(cancellationToken);

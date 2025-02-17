@@ -9,7 +9,6 @@ public class RegionReadRepository(LocaliteContext dbContext) : LocaliteReadRepos
     public async Task<IList<Region>> GetAllByDistrictIdAsync(Guid districtId, CancellationToken cancellationToken)
     {
         return await DbContext.Regions
-            .Include(r => r.Departements.Count)
             .AsNoTracking()
             .Where(x => x.DistrictId == districtId)
             .ToListAsync(cancellationToken);
@@ -27,7 +26,6 @@ public class RegionReadRepository(LocaliteContext dbContext) : LocaliteReadRepos
     public override async Task<IList<Region>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await DbContext.Regions
-            .Include(r => r.Departements.Count)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }

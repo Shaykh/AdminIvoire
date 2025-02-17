@@ -14,5 +14,6 @@ public class DepartementEntityTypeConfiguration : IEntityTypeConfiguration<Depar
         builder.HasOne(d => d.Region)
                .WithMany(r => r.Departements)
                .HasForeignKey(d => d.RegionId);
+        builder.OwnsOne(r => r.CoordonneesGeographiques);
     }
 }

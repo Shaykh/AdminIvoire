@@ -14,5 +14,6 @@ public class RegionEntityTypeConfiguration : IEntityTypeConfiguration<Region>
         builder.HasOne(r => r.District)
                .WithMany(d => d.Regions)
                .HasForeignKey(r => r.DistrictId);
+        builder.OwnsOne(r => r.CoordonneesGeographiques);
     }
 }

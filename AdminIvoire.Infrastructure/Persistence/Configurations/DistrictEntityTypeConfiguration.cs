@@ -11,5 +11,6 @@ public class DistrictEntityTypeConfiguration : IEntityTypeConfiguration<District
         builder.HasKey(d => d.Id);
         builder.HasIndex(d => d.Nom).IsUnique();
         builder.Property(d => d.Nom).IsRequired();
+        builder.OwnsOne(r => r.CoordonneesGeographiques);
     }
 }

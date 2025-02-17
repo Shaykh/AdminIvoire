@@ -13,5 +13,6 @@ public class VillageEntityTypeConfiguration : IEntityTypeConfiguration<Village>
         builder.HasOne(v => v.SousPrefecture)
                .WithMany(sp => sp.Villages)
                .HasForeignKey(v => v.SousPrefectureId);
+        builder.OwnsOne(r => r.CoordonneesGeographiques);
     }
 }

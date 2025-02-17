@@ -1,4 +1,5 @@
 ﻿using AdminIvoire.Domain.Entite;
+using AdminIvoire.Domain.ValueObject;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,5 +15,6 @@ public class CommuneEntityTypeConfiguration : IEntityTypeConfiguration<Commune>
         builder.HasOne(r => r.Departement)
                .WithMany(d => d.Communes)
                .HasForeignKey(r => r.DepartementId);
+        builder.OwnsOne(r => r.CoordonneesGeographiques);
     }
 }
