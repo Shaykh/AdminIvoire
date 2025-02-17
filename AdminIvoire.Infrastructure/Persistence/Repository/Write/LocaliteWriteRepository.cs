@@ -1,5 +1,4 @@
 ﻿using AdminIvoire.Domain.Entite;
-using Mapster;
 
 namespace AdminIvoire.Infrastructure.Persistence.Repository.Write;
 
@@ -17,7 +16,11 @@ public abstract class LocaliteWriteRepository<T>(LocaliteContext dbContext) wher
     {
         var entity = await _dbContext.Set<T>().FindAsync([localite.Id], cancellationToken)
             ?? throw new DataException($"Aucune entité de type {typeof(T).Name} avec id {localite.Id} n'a été trouvée.");
-        entity.Adapt(localite);
+        entity.Nom = localite.Nom;
+        entity.Code = localite.Code;
+        entity.Superficie = localite.Superficie;
+        entity.Population = localite.Population;
+        entity.CoordonneesGeographiques = localite.CoordonneesGeographiques;
     }
 
     public virtual async Task RemoveAsync(Guid id, CancellationToken cancellationToken)
