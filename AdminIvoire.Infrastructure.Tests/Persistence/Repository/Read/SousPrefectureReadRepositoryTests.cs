@@ -206,6 +206,42 @@ public class SousPrefectureReadRepositoryTests
         Assert.Null(result);
     }
 
+    [Fact]
+    public async Task GivenGetAllNomsAsync_WhenExistingSousPrefectures_ThenReturnEntities()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<LocaliteContext>()
+            .UseInMemoryDatabase(databaseName: nameof(GivenGetAllNomsAsync_WhenExistingSousPrefectures_ThenReturnEntities))
+            .Options;
+        using var context = new LocaliteContext(options);
+        var sut = new SousPrefectureReadRepository(context);
+        var (_, sousPrefectures) = await SetSousPrefecturesForTest(context);
+
+        //Act
+        var result = await sut.GetAllNomsAsync(CancellationToken.None);
+
+        //Assert
+        Assert.NotEmpty(result);
+        Assert.Equal(sousPrefectures.Count + 1, result.Count);
+    }
+
+    [Fact]
+    public async Task GivenGetAllNomsAsync_WhenNoSousPrefecture_ThenReturnEmptyList()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<LocaliteContext>()
+            .UseInMemoryDatabase(databaseName: nameof(GivenGetAllNomsAsync_WhenNoSousPrefecture_ThenReturnEmptyList))
+            .Options;
+        using var context = new LocaliteContext(options);
+        var sut = new SousPrefectureReadRepository(context);
+
+        //Act
+        var result = await sut.GetAllNomsAsync(CancellationToken.None);
+
+        //Assert
+        Assert.Empty(result);
+    }
+
     private static async Task<(Guid departementId, List<SousPrefecture> sousPrefecturesOfDepartement)> SetSousPrefecturesForTest(LocaliteContext context)
     {
         var departementId = Guid.NewGuid();

@@ -28,4 +28,12 @@ public abstract class LocaliteReadRepository<T>(LocaliteContext dbContext) where
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Nom == nom, cancellationToken);
     }
+
+    public async Task<IList<string>> GetAllNomsAsync(CancellationToken cancellationToken)
+    {
+        return await DbContext.Set<T>()
+            .AsNoTracking()
+            .Select(x => x.Nom)
+            .ToListAsync(cancellationToken);
+    }
 }

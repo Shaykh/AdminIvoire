@@ -181,6 +181,42 @@ public class RegionReadRepositoryTests
         Assert.Null(result);
     }
 
+    [Fact]
+    public async Task GivenGetAllNomsAsync_WhenExistingRegions_ThenReturnEntities()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<LocaliteContext>()
+            .UseInMemoryDatabase(databaseName: nameof(GivenGetAllNomsAsync_WhenExistingRegions_ThenReturnEntities))
+            .Options;
+        using var context = new LocaliteContext(options);
+        var sut = new RegionReadRepository(context);
+        var (_, regions) = await SetRegionsForTest(context);
+
+        //Act
+        var result = await sut.GetAllNomsAsync(CancellationToken.None);
+
+        //Assert
+        Assert.NotEmpty(result);
+        Assert.Equal(regions.Count + 1, result.Count);
+    }
+
+    [Fact]
+    public async Task GivenGetAllNomsAsync_WhenNoRegion_ThenReturnEmptyList()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<LocaliteContext>()
+            .UseInMemoryDatabase(databaseName: nameof(GivenGetAllNomsAsync_WhenNoRegion_ThenReturnEmptyList))
+            .Options;
+        using var context = new LocaliteContext(options);
+        var sut = new RegionReadRepository(context);
+
+        //Act
+        var result = await sut.GetAllNomsAsync(CancellationToken.None);
+
+        //Assert
+        Assert.Empty(result);
+    }
+
     private static async Task<(Guid districtId, List<Region> regionsOfDistrict)> SetRegionsForTest(LocaliteContext context)
     {
         var districtId = Guid.NewGuid();

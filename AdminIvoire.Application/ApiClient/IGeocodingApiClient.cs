@@ -2,7 +2,7 @@
 
 namespace AdminIvoire.Application.ApiClient;
 
-public interface IGeocodingApi
+public interface IGeocodingApiClient
 {
     Task<CoordonneesGeographiques> GetCoordonneesGeographiquesAsync(string localite, CancellationToken cancellationToken);
 }

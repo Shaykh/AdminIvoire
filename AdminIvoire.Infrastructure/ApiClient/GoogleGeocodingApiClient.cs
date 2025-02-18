@@ -8,7 +8,7 @@ using System.Net.Http.Json;
 
 namespace AdminIvoire.Infrastructure.ApiClient;
 
-public class GoogleGeocodingApiClient(IConfiguration configuration, HttpClient httpClient, ILogger<GoogleGeocodingApiClient> logger) : IGeocodingApi
+public class GoogleGeocodingApiClient(IConfiguration configuration, HttpClient httpClient, ILogger<GoogleGeocodingApiClient> logger) : IGeocodingApiClient
 {
     const string BaseUrlKey = "GoogleMaps:BaseUrl";
     const string ApiKeyKey = "GoogleMaps:ApiKey";

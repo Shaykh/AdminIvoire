@@ -206,6 +206,42 @@ public class CommuneReadRepositoryTests
         Assert.Null(result);
     }
 
+    [Fact]
+    public async Task GivenGetAllNomsAsync_WhenExistingCommunes_ThenReturnEntities()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<LocaliteContext>()
+            .UseInMemoryDatabase(databaseName: nameof(GivenGetAllNomsAsync_WhenExistingCommunes_ThenReturnEntities))
+            .Options;
+        using var context = new LocaliteContext(options);
+        var sut = new CommuneReadRepository(context);
+        var (_, communes) = await SetCommunesForTest(context);
+
+        //Act
+        var result = await sut.GetAllNomsAsync(CancellationToken.None);
+
+        //Assert
+        Assert.NotEmpty(result);
+        Assert.Equal(communes.Count + 1, result.Count);
+    }
+
+    [Fact]
+    public async Task GivenGetAllNomsAsync_WhenNoCommune_ThenReturnEmptyList()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<LocaliteContext>()
+            .UseInMemoryDatabase(databaseName: nameof(GivenGetAllNomsAsync_WhenNoCommune_ThenReturnEmptyList))
+            .Options;
+        using var context = new LocaliteContext(options);
+        var sut = new CommuneReadRepository(context);
+
+        //Act
+        var result = await sut.GetAllNomsAsync(CancellationToken.None);
+
+        //Assert
+        Assert.Empty(result);
+    }
+
     private static async Task<(Guid departementId, List<Commune> communesOfDepartement)> SetCommunesForTest(LocaliteContext context)
     {
         var departementId = Guid.NewGuid();

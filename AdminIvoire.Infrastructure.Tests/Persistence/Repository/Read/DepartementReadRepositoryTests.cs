@@ -195,6 +195,42 @@ public class DepartementReadRepositoryTests
         Assert.Null(result);
     }
 
+    [Fact]
+    public async Task GivenGetAllNomsAsync_WhenExistingDepartements_ThenReturnEntities()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<LocaliteContext>()
+            .UseInMemoryDatabase(databaseName: nameof(GivenGetAllNomsAsync_WhenExistingDepartements_ThenReturnEntities))
+            .Options;
+        using var context = new LocaliteContext(options);
+        var sut = new DepartementReadRepository(context);
+        var (_, communes) = await SetDepartementsForTest(context);
+
+        //Act
+        var result = await sut.GetAllNomsAsync(CancellationToken.None);
+
+        //Assert
+        Assert.NotEmpty(result);
+        Assert.Equal(communes.Count + 1, result.Count);
+    }
+
+    [Fact]
+    public async Task GivenGetAllNomsAsync_WhenNoDepartement_ThenReturnEmptyList()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<LocaliteContext>()
+            .UseInMemoryDatabase(databaseName: nameof(GivenGetAllNomsAsync_WhenNoDepartement_ThenReturnEmptyList))
+            .Options;
+        using var context = new LocaliteContext(options);
+        var sut = new DepartementReadRepository(context);
+
+        //Act
+        var result = await sut.GetAllNomsAsync(CancellationToken.None);
+
+        //Assert
+        Assert.Empty(result);
+    }
+
     private static async Task<(Guid regionId, List<Departement> departementsOfRegion)> SetDepartementsForTest(LocaliteContext context)
     {
         var regionId = Guid.NewGuid();

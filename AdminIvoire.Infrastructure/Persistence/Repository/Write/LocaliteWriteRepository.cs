@@ -1,4 +1,6 @@
 ﻿using AdminIvoire.Domain.Entite;
+using AdminIvoire.Domain.ValueObject;
+using Microsoft.EntityFrameworkCore;
 
 namespace AdminIvoire.Infrastructure.Persistence.Repository.Write;
 
@@ -21,6 +23,27 @@ public abstract class LocaliteWriteRepository<T>(LocaliteContext dbContext) wher
         entity.Superficie = localite.Superficie;
         entity.Population = localite.Population;
         entity.CoordonneesGeographiques = localite.CoordonneesGeographiques;
+    }
+
+    public virtual async Task UpdateCoordonneesGeographiquesAsync(string nom, CoordonneesGeographiques coordonneesGeographiques, CancellationToken cancellationToken)
+    {
+        var entity = await _dbContext.Set<T>().FirstOrDefaultAsync(x => x.Nom == nom, cancellationToken)
+            ?? throw new DataException($"Aucune entité de type {typeof(T).Name} avec nom {nom} n'a été trouvée.");
+        entity.CoordonneesGeographiques = coordonneesGeographiques;
+    }
+
+    public virtual async Task UpdateSuperficieAsync(string nom, decimal superficie, CancellationToken cancellationToken)
+    {
+        var entity = await _dbContext.Set<T>().FirstOrDefaultAsync(x => x.Nom == nom, cancellationToken)
+            ?? throw new DataException($"Aucune entité de type {typeof(T).Name} avec nom {nom} n'a été trouvée.");
+        entity.Superficie = superficie;
+    }
+
+    public virtual async Task UpdatePopulationAsync(string nom, int population, CancellationToken cancellationToken)
+    {
+        var entity = await _dbContext.Set<T>().FirstOrDefaultAsync(x => x.Nom == nom, cancellationToken)
+            ?? throw new DataException($"Aucune entité de type {typeof(T).Name} avec nom {nom} n'a été trouvée.");
+        entity.Population = population;
     }
 
     public virtual async Task RemoveAsync(Guid id, CancellationToken cancellationToken)

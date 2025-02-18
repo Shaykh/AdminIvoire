@@ -134,4 +134,48 @@ public class DistrictReadRepositoryTests
         //Assert
         Assert.Null(result);
     }
+
+    [Fact]
+    public async Task GivenGetAllNomsAsync_WhenExistingDistricts_ThenReturnEntities()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<LocaliteContext>()
+            .UseInMemoryDatabase(databaseName: nameof(GivenGetAllNomsAsync_WhenExistingDistricts_ThenReturnEntities))
+            .Options;
+        using var context = new LocaliteContext(options);
+        var sut = new DistrictReadRepository(context);
+        var districts = new List<District>
+        {
+            new() { Id = Guid.NewGuid(), Nom = "Vallée du Bandaman" },
+            new() { Id = Guid.NewGuid(), Nom = "Sud-Comoé" },
+            new() { Id = Guid.NewGuid(), Nom = "Lagunes" }
+        };
+        await context.Districts.AddRangeAsync(districts);
+        await context.SaveChangesAsync();
+
+        //Act
+        var result = await sut.GetAllNomsAsync(CancellationToken.None);
+
+        //Assert
+        Assert.NotEmpty(result);
+        Assert.Equal(districts.Count, result.Count);
+    }
+
+    [Fact]
+    public async Task GivenGetAllNomsAsync_WhenNoDistrict_ThenReturnEmptyList()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<LocaliteContext>()
+            .UseInMemoryDatabase(databaseName: nameof(GivenGetAllNomsAsync_WhenNoDistrict_ThenReturnEmptyList))
+            .Options;
+        using var context = new LocaliteContext(options);
+        var sut = new DistrictReadRepository(context);
+
+        //Act
+        var result = await sut.GetAllNomsAsync(CancellationToken.None);
+
+        //Assert
+        Assert.Empty(result);
+    }
+
 }

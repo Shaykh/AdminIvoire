@@ -215,6 +215,42 @@ public class VillageReadRepositoryTests
         Assert.Null(result);
     }
 
+    [Fact]
+    public async Task GivenGetAllNomsAsync_WhenExistingVillages_ThenReturnEntities()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<LocaliteContext>()
+            .UseInMemoryDatabase(databaseName: nameof(GivenGetAllNomsAsync_WhenExistingVillages_ThenReturnEntities))
+            .Options;
+        using var context = new LocaliteContext(options);
+        var sut = new VillageReadRepository(context);
+        var (_, villages) = await SetVillagesForTest(context);
+
+        //Act
+        var result = await sut.GetAllNomsAsync(CancellationToken.None);
+
+        //Assert
+        Assert.NotEmpty(result);
+        Assert.Equal(villages.Count + 1, result.Count);
+    }
+
+    [Fact]
+    public async Task GivenGetAllNomsAsync_WhenNoVillage_ThenReturnEmptyList()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<LocaliteContext>()
+            .UseInMemoryDatabase(databaseName: nameof(GivenGetAllNomsAsync_WhenNoVillage_ThenReturnEmptyList))
+            .Options;
+        using var context = new LocaliteContext(options);
+        var sut = new VillageReadRepository(context);
+
+        //Act
+        var result = await sut.GetAllNomsAsync(CancellationToken.None);
+
+        //Assert
+        Assert.Empty(result);
+    }
+
     private static async Task<(Guid sousPrefectureId, List<Village> villagesOfSousPrefecture)> SetVillagesForTest(LocaliteContext context)
     {
         var sousPrefectureId = Guid.NewGuid();
