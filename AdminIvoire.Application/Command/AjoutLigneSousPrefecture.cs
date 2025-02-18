@@ -52,12 +52,12 @@ public static class AjoutLigneSousPrefecture
             if (district == null)
             {
                 district = new District { Nom = request.DistrictNom, Population = request.Population };
+                await districtWriteRepository.AddAsync(district, cancellationToken);
             }
             else
             {
                 district.Population += request.Population;
             }
-            await districtWriteRepository.AddAsync(district, cancellationToken);
             return district;
         }
 
@@ -67,12 +67,12 @@ public static class AjoutLigneSousPrefecture
             if (region == null)
             {
                 region = new Region { Nom = request.RegionNom, District = district, Population = request.Population };
+                await regionWriteRepository.AddAsync(region, cancellationToken);
             }
             else
             {
                 region.Population += request.Population;
             }
-            await regionWriteRepository.AddAsync(region, cancellationToken);
             return region;
         }
 
@@ -82,14 +82,13 @@ public static class AjoutLigneSousPrefecture
             if (departement == null)
             {
                 departement = new Departement { Nom = request.DepartementNom, Region = region, Population = request.Population };
+                await departementWriteRepository.AddAsync(departement, cancellationToken);
             }
             else
             {
                 departement.Population += request.Population;
             }
-            await departementWriteRepository.AddAsync(departement, cancellationToken);
             return departement;
         }
-
     }
 }
