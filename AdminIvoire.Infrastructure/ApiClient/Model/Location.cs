@@ -5,7 +5,7 @@ namespace AdminIvoire.Infrastructure.ApiClient.Model;
 public record Location
 {
     [JsonPropertyName("lat")]
-    public double? Latitude { get; set; }
+    public double? Lat { get; set; }
     [JsonPropertyName("lng")]
-    public double? Longitude { get; set; }
+    public double? Lng { get; set; }
 }
