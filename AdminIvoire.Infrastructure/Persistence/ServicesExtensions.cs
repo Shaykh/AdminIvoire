@@ -21,14 +21,14 @@ public static class ServicesExtensions
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services
-            .AddDbContext(configuration)
+            .AddLocaliteDbContext(configuration)
             .AddReadRepositories()
             .AddWriteRepositories();
 
         return services;
     }
 
-    public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddLocaliteDbContext(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<LocaliteContext>(options => 
         { 
