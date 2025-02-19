@@ -2,7 +2,6 @@
 using AdminIvoire.Domain.Repository;
 using AdminIvoire.Domain.Repository.Read;
 using AdminIvoire.Domain.Repository.Write;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace AdminIvoire.Application.Command;

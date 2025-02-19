@@ -1,5 +1,4 @@
 ﻿using AdminIvoire.Domain.Entite;
-using AdminIvoire.Domain.ValueObject;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
