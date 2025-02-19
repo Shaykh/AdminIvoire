@@ -4,6 +4,8 @@ using AdminIvoire.Domain.Repository.Write;
 using AdminIvoire.Infrastructure.Persistence.Repository;
 using AdminIvoire.Infrastructure.Persistence.Repository.Read;
 using AdminIvoire.Infrastructure.Persistence.Repository.Write;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AdminIvoire.Infrastructure.Persistence;
@@ -15,12 +17,23 @@ public static class ServicesExtensions
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static IServiceCollection AddPersistence(this IServiceCollection services)
+    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services
+            .AddDbContext(configuration)
             .AddReadRepositories()
             .AddWriteRepositories();
+
+        return services;
+    }
+
+    public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddDbContext<LocaliteContext>(options => 
+        { 
+            options.UseNpgsql(configuration.GetConnectionString("LocaliteContext")); 
+        });
 
         return services;
     }

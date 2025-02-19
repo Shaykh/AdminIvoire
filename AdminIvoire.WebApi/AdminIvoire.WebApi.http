@@ -1,0 +1,6 @@
+@AdminIvoire.WebApi_HostAddress = http://localhost:5110
+
+GET {{AdminIvoire.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
