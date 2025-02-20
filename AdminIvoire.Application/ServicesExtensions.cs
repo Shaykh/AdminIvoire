@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AdminIvoire.Application.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AdminIvoire.Application;
 
@@ -12,6 +13,8 @@ public static class ServicesExtensions
         {
             configuration.RegisterServicesFromAssemblies(assembly);
         });
+
+        services.AddScoped<ILectureFichierCsvPopulationService, LectureFichierCsvPopulationService>();
 
         return services;
     }

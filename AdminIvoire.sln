@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminIvoire.Application.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminIvoire.WebApi", "AdminIvoire.WebApi\AdminIvoire.WebApi.csproj", "{B8B525AA-AF70-4AA2-A5A2-EB598E8115C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminIvoire.WebApi.Tests", "AdminIvoire.WebApi.Tests\AdminIvoire.WebApi.Tests.csproj", "{12D9A73A-8CAB-4172-BC5F-94EAAD5E6861}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{B8B525AA-AF70-4AA2-A5A2-EB598E8115C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8B525AA-AF70-4AA2-A5A2-EB598E8115C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8B525AA-AF70-4AA2-A5A2-EB598E8115C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12D9A73A-8CAB-4172-BC5F-94EAAD5E6861}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12D9A73A-8CAB-4172-BC5F-94EAAD5E6861}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12D9A73A-8CAB-4172-BC5F-94EAAD5E6861}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12D9A73A-8CAB-4172-BC5F-94EAAD5E6861}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +70,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{72E0F5E2-CCBA-4EEF-ABB1-1D6DF1F41C91} = {0B4156AE-204D-471B-81BB-D7F3A8D84A52}
 		{43A27BE7-B850-4F2C-B738-704C153E159C} = {0B4156AE-204D-471B-81BB-D7F3A8D84A52}
+		{12D9A73A-8CAB-4172-BC5F-94EAAD5E6861} = {0B4156AE-204D-471B-81BB-D7F3A8D84A52}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BCACC4C9-B663-4A6A-8B39-DA4ABBFD5481}

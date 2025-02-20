@@ -1,4 +1,5 @@
-﻿using AdminIvoire.Domain.Repository;
+﻿using AdminIvoire.Application.Parametrage;
+using AdminIvoire.Domain.Repository;
 using AdminIvoire.Domain.Repository.Read;
 using AdminIvoire.Domain.Repository.Write;
 using AdminIvoire.Infrastructure.Persistence.Repository;
@@ -22,6 +23,7 @@ public static class ServicesExtensions
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services
             .AddLocaliteDbContext(configuration)
+            .AddScoped<IParametrageRepository, ParametrageRepository>()
             .AddReadRepositories()
             .AddWriteRepositories();
 
