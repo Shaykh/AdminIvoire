@@ -1,0 +1,39 @@
+services:
+  adminivoire.webapi:
+    image: ${DOCKER_REGISTRY-}adminivoirewebapi
+    container_name: adminivoire.webapi
+    build:
+      context: .
+      dockerfile: AdminIvoire.WebApi/Dockerfile
+    ports:
+        - "5000:5000"
+        - "5001:5001"
+    depends_on:
+        - adminivoire.db
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - ConnectionStrings__LocaliteContext=Host=adminivoire.db;Database=adminivoire;Username=adminivoire;Password=${POSTGRES_PASSWORD};Port=5432
+    networks:
+        - adminivoire
+
+  
+  adminivoire.db:
+    image: postgres
+    container_name: adminivoire.db
+    restart: always
+    environment:
+      POSTGRES_USER: adminivoire
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: adminivoire
+    ports:
+        - "5432:5432"
+    volumes:
+        - adminivoire.db-data:/var/lib/postgresql/data
+    networks:
+        - adminivoire
+
+networks:
+      adminivoire:
+
+volumes:
+    adminivoire.db-data:

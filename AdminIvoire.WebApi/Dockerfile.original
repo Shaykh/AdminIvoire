@@ -13,10 +13,6 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["AdminIvoire.WebApi/AdminIvoire.WebApi.csproj", "AdminIvoire.WebApi/"]
-COPY ["AdminIvoire.Application/AdminIvoire.Application.csproj", "AdminIvoire.Application/"]
-COPY ["AdminIvoire.Domain/AdminIvoire.Domain.csproj", "AdminIvoire.Domain/"]
-COPY ["AdminIvoire.Infrastructure/AdminIvoire.Infrastructure.csproj", "AdminIvoire.Infrastructure/"]
-
 RUN dotnet restore "./AdminIvoire.WebApi/AdminIvoire.WebApi.csproj"
 COPY . .
 WORKDIR "/src/AdminIvoire.WebApi"
@@ -26,8 +22,6 @@ RUN dotnet build "./AdminIvoire.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/b
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./AdminIvoire.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-COPY  wwwroot/Data/localite_data_.csv /app/wwwroot/Data/localite_data_.csv
 
 # Cette phase est utilisée en production ou lors de l’exécution à partir de VS en mode normal (par défaut quand la configuration de débogage n’est pas utilisée)
 FROM base AS final
