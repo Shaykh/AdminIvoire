@@ -4,7 +4,7 @@ using AdminIvoire.Infrastructure.Configuration;
 
 namespace AdminIvoire.WebApi.BackgroundServices;
 
-public class SeedLocalitePopulationService(ILogger<SeedLocalitePopulationService> logger,
+public class InitialisationDonneesLocalitePopulationService(ILogger<InitialisationDonneesLocalitePopulationService> logger,
     IServiceProvider serviceProvider,
     IConfiguration configuration,
     IWebHostEnvironment webHostEnvironment) : BackgroundService
@@ -28,7 +28,7 @@ public class SeedLocalitePopulationService(ILogger<SeedLocalitePopulationService
         var cheminFichierPhysique = GetPhysicalFullPath(cheminFichier);
         using var scope = serviceProvider.CreateScope();
         var parametrageRepository = scope.ServiceProvider.GetRequiredService<IParametrageRepository>();
-        if ((await parametrageRepository.GetParametrageAsync(nameof(SeedLocalitePopulationService))) is not null)
+        if ((await parametrageRepository.GetParametrageAsync(nameof(InitialisationDonneesLocalitePopulationService))) is not null)
         {
             logger.LogInformation("La lecture des données de localité depuis le fichier csv a déja  été effectuée.");
             return;
@@ -36,7 +36,7 @@ public class SeedLocalitePopulationService(ILogger<SeedLocalitePopulationService
         var lectureFichierCsvPopulationService = scope.ServiceProvider.GetRequiredService<ILectureFichierCsvPopulationService>();
         await lectureFichierCsvPopulationService.LireFichierCsvPopulationAsync(cheminFichierPhysique, stoppingToken);
         await parametrageRepository.SetParametrageAsync(
-            new ParametrageEntity { Key = nameof(SeedLocalitePopulationService), Value = DateTime.Now.ToString() }
+            new ParametrageEntity { Key = nameof(InitialisationDonneesLocalitePopulationService), Value = DateTime.Now.ToString() }
             );
     }
 
