@@ -9,11 +9,11 @@ public class RecuperationDonneesGeographiqueService(ILogger<RecuperationDonneesG
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("Début exécution du service de lecture des données de localité depuis le fichier csv");
+        logger.LogInformation("Début exécution du service de lecture des données de localité");
 
         await RecupererDonneesLocaliteAsync(stoppingToken);
 
-        logger.LogInformation("Fin exécution du service de lecture des données de localité depuis le fichier csv");
+        logger.LogInformation("Fin exécution du service de lecture des données de localité");
     }
 
     public async Task RecupererDonneesLocaliteAsync(CancellationToken stoppingToken)

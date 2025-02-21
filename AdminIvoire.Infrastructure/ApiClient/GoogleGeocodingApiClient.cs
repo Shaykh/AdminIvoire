@@ -55,11 +55,13 @@ public class GoogleGeocodingApiClient(IConfiguration configuration, HttpClient h
 
     private string FormatGeocodingRequestUrl(string localite)
     {
+        var localitePrecise = $"{localite}, Côte d'Ivoire";
         var apiKey = _configuration[ApiKeyKey] ?? throw new ConfigurationException("Aucune valeur de configuration de clé n'a été définie pour l'api GoogleMaps");
         var baseUrl = _configuration[BaseUrlKey] ?? throw new ConfigurationException("Aucune valeur de configuration d'url n'a été définie pour l'api GoogleMaps");
         _logger.LogInformation("Récupération des coordonnées géographiques de {Localite}", localite);
         _logger.LogDebug("Url: {Url}", baseUrl);
-        var url = $"{baseUrl}?address={Uri.EscapeDataString(localite)}&key={apiKey}";
+        var url = $"{baseUrl}?address={Uri.EscapeDataString(localitePrecise)}&key={apiKey}";
+        _logger.LogDebug("Url formatée: {Url}", url);
         return url;
     }
 }
