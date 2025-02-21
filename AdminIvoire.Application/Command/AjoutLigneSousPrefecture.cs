@@ -24,6 +24,7 @@ public static class AjoutLigneSousPrefecture
         IRegionWriteRepository regionWriteRepository,
         IDepartementReadRepository departementReadRepository,
         IDepartementWriteRepository departementWriteRepository,
+        ISousPrefectureReadRepository sousPrefectureReadRepository,
         ISousPrefectureWriteRepository sousPrefectureWriteRepository, 
         IUnitOfWork unitOfWork) : ICommandHandler<Command>
     {
@@ -35,13 +36,7 @@ public static class AjoutLigneSousPrefecture
             var district = await GetDistrictAsync(request, cancellationToken);
             var region = await GetRegionAsync(request, district, cancellationToken);
             var departement = await GetDepartementAsync(request, region, cancellationToken);
-            var sousPrefecture = new SousPrefecture
-            {
-                Nom = request.SousprefectureNom,
-                Departement = departement,
-                Population = request.Population
-            };
-            await sousPrefectureWriteRepository.AddAsync(sousPrefecture, cancellationToken);
+            await SetSousPrefectureDataAsync(request, departement, cancellationToken);
 
             await unitOfWork.CommitAsync(cancellationToken);
         }
@@ -89,6 +84,20 @@ public static class AjoutLigneSousPrefecture
                 departement.Population += request.Population;
             }
             return departement;
+        }
+
+        private async Task SetSousPrefectureDataAsync(Command request, Departement departement, CancellationToken cancellationToken)
+        {
+            var sousPrefecture = await sousPrefectureReadRepository.GetByNomAsync(request.SousprefectureNom, cancellationToken);
+            if (sousPrefecture == null)
+            {
+                sousPrefecture = new SousPrefecture { Nom = request.SousprefectureNom, Departement = departement, Population = request.Population };
+                await sousPrefectureWriteRepository.AddAsync(sousPrefecture, cancellationToken);
+            }
+            else
+            {
+                sousPrefecture.Population += request.Population;
+            }
         }
     }
 }
