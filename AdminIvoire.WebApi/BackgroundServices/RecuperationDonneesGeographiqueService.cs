@@ -26,9 +26,12 @@ public class RecuperationDonneesGeographiqueService(ILogger<RecuperationDonneesG
             logger.LogInformation("La recuperation des coordonnées des localités a déja été effectuée.");
             return;
         }
-        await sender.Send(new RecupererCoordonneesGeographiquesDeSousPrefectures.Command(), stoppingToken);
-        await parametrageRepository.SetParametrageAsync(
+        var recuperationReussie = await sender.Send(new RecupererCoordonneesGeographiquesDeSousPrefectures.Command(), stoppingToken);
+        if (recuperationReussie)
+        {
+            await parametrageRepository.SetParametrageAsync(
             new ParametrageEntity { Key = nameof(RecuperationDonneesGeographiqueService), Value = DateTime.Now.ToString() }
             );
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace AdminIvoire.Application.Command;
 
 public static class RecupererCoordonneesGeographiquesDeSousPrefectures
 {
-    public record Command : ICommand
+    public record Command : ICommand<bool>
     { 
     }
 
@@ -16,20 +16,25 @@ public static class RecupererCoordonneesGeographiquesDeSousPrefectures
         ISousPrefectureReadRepository sousPrefectureReadRepository,
         ISousPrefectureWriteRepository sousPrefectureWriteRepository,
         IGeocodingApiClient geocodingApiClient,
-        IUnitOfWork unitOfWork) : ICommandHandler<Command>
+        IUnitOfWork unitOfWork) : ICommandHandler<Command, bool>
     {
-        public async Task Handle(Command request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
         {
             logger.LogInformation("Récupération des coordonnées géographiques en lot");
 
             var listeNomSousPrefectures = await sousPrefectureReadRepository.GetAllNomsAsync(cancellationToken);
-
+            if (listeNomSousPrefectures.Count == 0)
+            {
+                logger.LogInformation("Aucune sous-préfecture à traiter");
+                return false;
+            }
             foreach (var nomLocalite in listeNomSousPrefectures)
             {
                 await RecupererCoordonnneesGeographiquesDUneSousPrefectureAsync(nomLocalite, cancellationToken);
             }
 
             await unitOfWork.CommitAsync(cancellationToken);
+            return true;
         }
 
         private async Task RecupererCoordonnneesGeographiquesDUneSousPrefectureAsync(string nomLocalite, CancellationToken cancellationToken)
