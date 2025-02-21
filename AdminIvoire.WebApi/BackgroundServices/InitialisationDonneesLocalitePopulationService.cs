@@ -13,12 +13,12 @@ public class InitialisationDonneesLocalitePopulationService(ILogger<Initialisati
     {
         logger.LogInformation("Début exécution du service de lecture des données de localité depuis le fichier csv");
 
-        await ReadLocaliteDataAsync(stoppingToken);
+        await LireDonneesLocaliteAsync(stoppingToken);
 
         logger.LogInformation("Fin exécution du service de lecture des données de localité depuis le fichier csv");
     }
 
-    public async Task ReadLocaliteDataAsync(CancellationToken stoppingToken)
+    public async Task LireDonneesLocaliteAsync(CancellationToken stoppingToken)
     {
         var cheminFichier = configuration["FichierPopulation"];
         if (string.IsNullOrWhiteSpace(cheminFichier))

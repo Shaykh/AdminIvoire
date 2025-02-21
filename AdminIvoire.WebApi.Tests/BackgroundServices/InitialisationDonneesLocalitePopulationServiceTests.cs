@@ -23,14 +23,14 @@ public class InitialisationDonneesLocalitePopulationServiceTests
             Mock.Of<IWebHostEnvironment>());
 
         //Act
-        async Task act() => await sut.ReadLocaliteDataAsync(CancellationToken.None);
+        async Task act() => await sut.LireDonneesLocaliteAsync(CancellationToken.None);
 
         //Assert
         await Assert.ThrowsAsync<ConfigurationException>(act);
     }
 
     [Fact]
-    public async Task GivenReadLocaliteDataAsync_WhenFileConfigurationExistsAndParametrageAlreadyExists_ThenDoNothing()
+    public async Task GivenLireDonneesLocaliteAsync_WhenFileConfigurationExistsAndParametrageAlreadyExists_ThenDoNothing()
     {
         //Arrange
         var configuration = new ConfigurationBuilder()
@@ -56,7 +56,7 @@ public class InitialisationDonneesLocalitePopulationServiceTests
             webHostEnvironmentMock.Object);
 
         //Act
-        await sut.ReadLocaliteDataAsync(CancellationToken.None);
+        await sut.LireDonneesLocaliteAsync(CancellationToken.None);
 
         //Assert
         parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(InitialisationDonneesLocalitePopulationService)), Times.Once);
@@ -65,7 +65,7 @@ public class InitialisationDonneesLocalitePopulationServiceTests
     }
 
     [Fact]
-    public async Task GivenReadLocaliteDataAsync_WhenFileConfigurationExistsAndParametrageDoesNotExist_ThenLireFichier()
+    public async Task GivenLireDonneesLocaliteAsync_WhenFileConfigurationExistsAndParametrageDoesNotExist_ThenLireFichier()
     {
         //Arrange
         var configuration = new ConfigurationBuilder()
@@ -91,11 +91,11 @@ public class InitialisationDonneesLocalitePopulationServiceTests
             webHostEnvironmentMock.Object);
 
         //Act
-        await sut.ReadLocaliteDataAsync(CancellationToken.None);
+        await sut.LireDonneesLocaliteAsync(CancellationToken.None);
 
         //Assert
         parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(InitialisationDonneesLocalitePopulationService)), Times.Once);
         parametrageRepositoryMock.Verify(x => x.SetParametrageAsync(It.Is<ParametrageEntity>(p => p.Key == nameof(InitialisationDonneesLocalitePopulationService))), Times.Once);
-        lectureFichierCsvPopulationServiceMock.Verify(x => x.LireFichierCsvPopulationAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        lectureFichierCsvPopulationServiceMock.Verify(x => x.LireFichierCsvPopulationAsync(It.Is<string>(s => s.Contains("data.csv")), It.IsAny<CancellationToken>()), Times.Once);
     }
 }
