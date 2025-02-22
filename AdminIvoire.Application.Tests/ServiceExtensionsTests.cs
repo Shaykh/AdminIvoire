@@ -1,4 +1,5 @@
 ﻿using AdminIvoire.Application.Services;
+using AdminIvoire.Domain.Factory;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,5 +31,22 @@ public class ServiceExtensionsTests
 
         // Assert
         Assert.Contains(services, x => x.ServiceType == typeof(IMediator) && x.ImplementationType == typeof(Mediator));
+    }
+
+    [Fact]
+    public void GivenServiceCollection_WhenAddApplication_ThenAddFactories()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+
+        // Act
+        services.AddApplication();
+
+        // Assert
+        Assert.Contains(services, x => x.ServiceType == typeof(IDistrictFactory) && x.ImplementationType == typeof(DistrictFactory));
+        Assert.Contains(services, x => x.ServiceType == typeof(IRegionFactory) && x.ImplementationType == typeof(RegionFactory));
+        Assert.Contains(services, x => x.ServiceType == typeof(IDepartementFactory) && x.ImplementationType == typeof(DepartementFactory));
+        Assert.Contains(services, x => x.ServiceType == typeof(ISousPrefectureFactory) && x.ImplementationType == typeof(SousPrefectureFactory));
+        Assert.Contains(services, x => x.ServiceType == typeof(ICommuneFactory) && x.ImplementationType == typeof(CommuneFactory));
     }
 }

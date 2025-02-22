@@ -1,7 +1,5 @@
-﻿using AdminIvoire.Domain.Entite;
+﻿using AdminIvoire.Domain.Factory;
 using AdminIvoire.Domain.Repository;
-using AdminIvoire.Domain.Repository.Read;
-using AdminIvoire.Domain.Repository.Write;
 using Microsoft.Extensions.Logging;
 
 namespace AdminIvoire.Application.Command;
@@ -18,14 +16,10 @@ public static class AjoutLigneSousPrefecture
     }
 
     public class Handler(ILogger<Handler> logger,
-        IDistrictReadRepository districtReadRepository,
-        IDistrictWriteRepository districtWriteRepository,
-        IRegionReadRepository regionReadRepository,
-        IRegionWriteRepository regionWriteRepository,
-        IDepartementReadRepository departementReadRepository,
-        IDepartementWriteRepository departementWriteRepository,
-        ISousPrefectureReadRepository sousPrefectureReadRepository,
-        ISousPrefectureWriteRepository sousPrefectureWriteRepository, 
+        IDistrictFactory districtFactory,
+        IRegionFactory regionFactory,
+        IDepartementFactory departementFactory,
+        ISousPrefectureFactory sousPrefectureFactory,
         IUnitOfWork unitOfWork) : ICommandHandler<Command>
     {
         public async Task Handle(Command request, CancellationToken cancellationToken)
@@ -33,71 +27,12 @@ public static class AjoutLigneSousPrefecture
             logger.LogInformation("Ajout d'une ligne de sous-préfecture {District}, {Region}, {Departement}, {SousPrefecture}",
                 request.DistrictNom, request.RegionNom, request.DepartementNom, request.SousprefectureNom);
 
-            var district = await GetDistrictAsync(request, cancellationToken);
-            var region = await GetRegionAsync(request, district, cancellationToken);
-            var departement = await GetDepartementAsync(request, region, cancellationToken);
-            await SetSousPrefectureDataAsync(request, departement, cancellationToken);
+            var district = await districtFactory.GetOrCreateAsync(request.DistrictNom, request.Population, cancellationToken);
+            var region = await regionFactory.GetOrCreateAsync(request.RegionNom, request.Population, district, cancellationToken);
+            var departement = await departementFactory.GetOrCreateAsync(request.DepartementNom, request.Population, region, cancellationToken);
+            await sousPrefectureFactory.GetOrCreateAsync(request.SousprefectureNom, request.Population, departement, cancellationToken);
 
             await unitOfWork.CommitAsync(cancellationToken);
-        }
-
-        private async Task<District> GetDistrictAsync(Command request, CancellationToken cancellationToken)
-        {
-            var district = await districtReadRepository.GetByNomAsync(request.DistrictNom, cancellationToken);
-            if (district == null)
-            {
-                district = new District { Nom = request.DistrictNom, Population = request.Population };
-                await districtWriteRepository.AddAsync(district, cancellationToken);
-            }
-            else
-            {
-                district.Population += request.Population;
-            }
-            return district;
-        }
-
-        private async Task<Region> GetRegionAsync(Command request, District district, CancellationToken cancellationToken)
-        {
-            var region = await regionReadRepository.GetByNomAsync(request.RegionNom, cancellationToken);
-            if (region == null)
-            {
-                region = new Region { Nom = request.RegionNom, District = district, Population = request.Population };
-                await regionWriteRepository.AddAsync(region, cancellationToken);
-            }
-            else
-            {
-                region.Population += request.Population;
-            }
-            return region;
-        }
-
-        private async Task<Departement> GetDepartementAsync(Command request, Region region, CancellationToken cancellationToken)
-        {
-            var departement = await departementReadRepository.GetByNomAsync(request.DepartementNom, cancellationToken);
-            if (departement == null)
-            {
-                departement = new Departement { Nom = request.DepartementNom, Region = region, Population = request.Population };
-                await departementWriteRepository.AddAsync(departement, cancellationToken);
-            }
-            else
-            {
-                departement.Population += request.Population;
-            }
-            return departement;
-        }
-
-        private async Task SetSousPrefectureDataAsync(Command request, Departement departement, CancellationToken cancellationToken)
-        {
-            var sousPrefecture = await sousPrefectureReadRepository.GetByNomAsync(request.SousprefectureNom, cancellationToken);
-            if (sousPrefecture == null)
-            {
-                sousPrefecture = new SousPrefecture { Nom = request.SousprefectureNom, Departement = departement, Population = request.Population };
-                await sousPrefectureWriteRepository.AddAsync(sousPrefecture, cancellationToken);
-            }
-            else
-            {
-                sousPrefecture.Population += request.Population;
-            }
         }
     }
 }
