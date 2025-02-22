@@ -10,7 +10,7 @@ public class ParametrageEntityTypeConfiguration : IEntityTypeConfiguration<Param
     {
         builder.ToTable("Parametrage");
         builder.HasKey(e => e.Key);
-        builder.Property(e => e.Key).HasMaxLength(50).IsRequired();
+        builder.Property(e => e.Key).HasMaxLength(150).IsRequired();
         builder.Property(e => e.Value).HasMaxLength(50).IsRequired();
     }
 }
