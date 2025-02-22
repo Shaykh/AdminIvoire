@@ -20,7 +20,7 @@ public static class RecupererCoordonneesGeographiquesDeSousPrefectures
     {
         public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
         {
-            logger.LogInformation("Récupération des coordonnées géographiques en lot");
+            logger.LogInformation("Récupération des coordonnées géographiques de sous-préfectures en lot");
 
             var listeNomSousPrefectures = await sousPrefectureReadRepository.GetAllNomsAsync(cancellationToken);
             if (listeNomSousPrefectures.Count == 0)
