@@ -11,26 +11,72 @@ public class RecuperationDonneesGeographiqueService(ILogger<RecuperationDonneesG
     {
         logger.LogInformation("Début exécution du service de lecture des données de localité");
 
-        await RecupererDonneesLocaliteAsync(stoppingToken);
+        await RecupererDonneesGeoLocaliteAsync(stoppingToken);
 
         logger.LogInformation("Fin exécution du service de lecture des données de localité");
     }
 
-    public async Task RecupererDonneesLocaliteAsync(CancellationToken stoppingToken)
+    public async Task RecupererDonneesGeoLocaliteAsync(CancellationToken stoppingToken)
     {
         using var scope = serviceProvider.CreateScope();
+        await RecupererDonneesGeoDeDepartementsAsync(scope, stoppingToken);
+        await RecupererDonneesGeoDeSousPrefecturesAsync(scope, stoppingToken);
+        await RecupererDonneesGeoDeVillagesAsync(scope, stoppingToken);
+    }
+
+    private async Task RecupererDonneesGeoDeSousPrefecturesAsync(IServiceScope scope, CancellationToken stoppingToken)
+    {
+        var parametrageKey = nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures);
         var sender = scope.ServiceProvider.GetRequiredService<ISender>();
         var parametrageRepository = scope.ServiceProvider.GetRequiredService<IParametrageRepository>();
-        if ((await parametrageRepository.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueService))) is not null)
+        if ((await parametrageRepository.GetParametrageAsync(parametrageKey)) is not null)
         {
-            logger.LogInformation("La recuperation des coordonnées des localités a déja été effectuée.");
+            logger.LogInformation("La recuperation des coordonnées des sous-préfectures a déja été effectuée.");
             return;
         }
         var recuperationReussie = await sender.Send(new RecupererCoordonneesGeographiquesDeSousPrefectures.Command(), stoppingToken);
         if (recuperationReussie)
         {
             await parametrageRepository.SetParametrageAsync(
-            new ParametrageEntity { Key = nameof(RecuperationDonneesGeographiqueService), Value = DateTime.Now.ToString() }
+            new ParametrageEntity { Key = parametrageKey, Value = DateTime.Now.ToString() }
+            );
+        }
+    }
+
+    private async Task RecupererDonneesGeoDeDepartementsAsync(IServiceScope scope, CancellationToken stoppingToken)
+    {
+        var parametrageKey = nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeDepartements);
+        var sender = scope.ServiceProvider.GetRequiredService<ISender>();
+        var parametrageRepository = scope.ServiceProvider.GetRequiredService<IParametrageRepository>();
+        if ((await parametrageRepository.GetParametrageAsync(parametrageKey)) is not null)
+        {
+            logger.LogInformation("La recuperation des coordonnées des départements a déja été effectuée.");
+            return;
+        }
+        var recuperationReussie = await sender.Send(new RecupererCoordonneesGeographiquesDeDepartements.Command(), stoppingToken);
+        if (recuperationReussie)
+        {
+            await parametrageRepository.SetParametrageAsync(
+            new ParametrageEntity { Key = parametrageKey, Value = DateTime.Now.ToString() }
+            );
+        }
+    }
+
+    private async Task RecupererDonneesGeoDeVillagesAsync(IServiceScope scope, CancellationToken stoppingToken)
+    {
+        var parametrageKey = nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeVillages);
+        var sender = scope.ServiceProvider.GetRequiredService<ISender>();
+        var parametrageRepository = scope.ServiceProvider.GetRequiredService<IParametrageRepository>();
+        if ((await parametrageRepository.GetParametrageAsync(parametrageKey)) is not null)
+        {
+            logger.LogInformation("La recuperation des coordonnées des villages a déja été effectuée.");
+            return;
+        }
+        var recuperationReussie = await sender.Send(new RecupererCoordonneesGeographiquesDeVillages.Command(), stoppingToken);
+        if (recuperationReussie)
+        {
+            await parametrageRepository.SetParametrageAsync(
+            new ParametrageEntity { Key = parametrageKey, Value = DateTime.Now.ToString() }
             );
         }
     }

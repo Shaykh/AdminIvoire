@@ -12,7 +12,7 @@ namespace AdminIvoire.Application.Tests.Command;
 public class RecupererCoordonneesGeographiquesDeSousPrefecturesHandlerTests
 {
     [Fact]
-    public async Task GivenHandler_WhenHandle_ThenShouldCallGeocodingApiClientAndSousPrefectureWriteRepository()
+    public async Task GivenHandler_WhenSousPrefectures_ThenCallGeocodingApiClientAndSousPrefectureWriteRepositoryAndReturnTrue()
     {
         // Arrange
         var sut = MakeSut(out var sousPrefectureReadRepository, out var sousPrefectureWriteRepository, out var geocodingApiClient, out var unitOfWork);
@@ -22,12 +22,12 @@ public class RecupererCoordonneesGeographiquesDeSousPrefecturesHandlerTests
             Latitude = 1,
             Longitude = 2
         };
-        var listeNomSousPrefectures = new List<string> { "nom1", "nom2" };
+        var listeNomSousPrefectures = new List<string> { "sousPrefecture1", "sousPrefecture2" };
         sousPrefectureReadRepository.Setup(x => x.GetAllNomsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(listeNomSousPrefectures);
         geocodingApiClient.Setup(x => x.GetCoordonneesGeographiquesAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(coordonneesGeographiques);
 
         // Act
-        await sut.Handle(command, CancellationToken.None);
+         var result = await sut.Handle(command, CancellationToken.None);
 
         // Assert
         sousPrefectureReadRepository.Verify(x => x.GetAllNomsAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -35,6 +35,30 @@ public class RecupererCoordonneesGeographiquesDeSousPrefecturesHandlerTests
         sousPrefectureWriteRepository.Verify(x => x.UpdateCoordonneesGeographiquesAsync(It.IsAny<string>(), coordonneesGeographiques, It.IsAny<CancellationToken>()), 
             Times.Exactly(listeNomSousPrefectures.Count));
         unitOfWork.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task GivenHandler_WhenNoSousPrefecture_ThenDONothingReturnFalse()
+    {
+        // Arrange
+        var sut = MakeSut(out var sousPrefectureReadRepository, out var sousPrefectureWriteRepository, out var geocodingApiClient, out var unitOfWork);
+        var command = new RecupererCoordonneesGeographiquesDeSousPrefectures.Command();
+        var listeNomSousPrefectures = new List<string>();
+        sousPrefectureReadRepository.Setup(x => x.GetAllNomsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(listeNomSousPrefectures);
+
+        // Act
+        var result = await sut.Handle(command, CancellationToken.None);
+
+        // Assert
+        sousPrefectureReadRepository.Verify(x => x.GetAllNomsAsync(It.IsAny<CancellationToken>()), Times.Once);
+        geocodingApiClient.Verify(x => x.GetCoordonneesGeographiquesAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), 
+            Times.Never);
+        sousPrefectureWriteRepository.Verify(x => x.UpdateCoordonneesGeographiquesAsync(It.IsAny<string>(), It.IsAny<CoordonneesGeographiques>(), It.IsAny<CancellationToken>()), 
+            Times.Never);
+        unitOfWork.Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), 
+            Times.Never);
+        Assert.False(result);
     }
 
     private static RecupererCoordonneesGeographiquesDeSousPrefectures.Handler MakeSut(
