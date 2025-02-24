@@ -21,7 +21,6 @@ public class RecuperationDonneesGeographiqueService(ILogger<RecuperationDonneesG
         using var scope = serviceProvider.CreateScope();
         await RecupererDonneesGeoDeDepartementsAsync(scope, stoppingToken);
         await RecupererDonneesGeoDeSousPrefecturesAsync(scope, stoppingToken);
-        await RecupererDonneesGeoDeVillagesAsync(scope, stoppingToken);
     }
 
     private async Task RecupererDonneesGeoDeSousPrefecturesAsync(IServiceScope scope, CancellationToken stoppingToken)
@@ -62,22 +61,4 @@ public class RecuperationDonneesGeographiqueService(ILogger<RecuperationDonneesG
         }
     }
 
-    private async Task RecupererDonneesGeoDeVillagesAsync(IServiceScope scope, CancellationToken stoppingToken)
-    {
-        var parametrageKey = nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeVillages);
-        var sender = scope.ServiceProvider.GetRequiredService<ISender>();
-        var parametrageRepository = scope.ServiceProvider.GetRequiredService<IParametrageRepository>();
-        if ((await parametrageRepository.GetParametrageAsync(parametrageKey)) is not null)
-        {
-            logger.LogInformation("La recuperation des coordonnées des villages a déja été effectuée.");
-            return;
-        }
-        var recuperationReussie = await sender.Send(new RecupererCoordonneesGeographiquesDeVillages.Command(), stoppingToken);
-        if (recuperationReussie)
-        {
-            await parametrageRepository.SetParametrageAsync(
-            new ParametrageEntity { Key = parametrageKey, Value = DateTime.Now.ToString() }
-            );
-        }
-    }
 }
