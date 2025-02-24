@@ -4,7 +4,7 @@ using MediatR;
 
 namespace AdminIvoire.WebApi.BackgroundServices;
 
-public class RecuperationDonneesGeographiqueService(ILogger<RecuperationDonneesGeographiqueService> logger,
+public class RecuperationDonneesGeographiqueBackgroundService(ILogger<RecuperationDonneesGeographiqueBackgroundService> logger,
     IServiceProvider serviceProvider) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -25,7 +25,7 @@ public class RecuperationDonneesGeographiqueService(ILogger<RecuperationDonneesG
 
     private async Task RecupererDonneesGeoDeSousPrefecturesAsync(IServiceScope scope, CancellationToken stoppingToken)
     {
-        var parametrageKey = nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures);
+        var parametrageKey = nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures);
         var sender = scope.ServiceProvider.GetRequiredService<ISender>();
         var parametrageRepository = scope.ServiceProvider.GetRequiredService<IParametrageRepository>();
         if ((await parametrageRepository.GetParametrageAsync(parametrageKey)) is not null)
@@ -44,7 +44,7 @@ public class RecuperationDonneesGeographiqueService(ILogger<RecuperationDonneesG
 
     private async Task RecupererDonneesGeoDeDepartementsAsync(IServiceScope scope, CancellationToken stoppingToken)
     {
-        var parametrageKey = nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeDepartements);
+        var parametrageKey = nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeDepartements);
         var sender = scope.ServiceProvider.GetRequiredService<ISender>();
         var parametrageRepository = scope.ServiceProvider.GetRequiredService<IParametrageRepository>();
         if ((await parametrageRepository.GetParametrageAsync(parametrageKey)) is not null)

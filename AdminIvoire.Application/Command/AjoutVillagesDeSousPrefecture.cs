@@ -11,7 +11,7 @@ namespace AdminIvoire.Application.Command;
 
 public static class AjoutVillagesDeSousPrefecture
 {
-    public record Command(Guid SousPrefectureId, string[] Villages) : IRequest;
+    public record Command(Guid SousPrefectureId, string[] Villages) : ICommand;
 
     public class Validator : AbstractValidator<Command>
     {
@@ -28,7 +28,7 @@ public static class AjoutVillagesDeSousPrefecture
         ISousPrefectureReadRepository sousPrefectureReadRepository,
         IVillageWriteRepository villageWriteRepository,
         IGeocodingApiClient geocodingApiClient,
-        IUnitOfWork unitOfWork) : IRequestHandler<Command>
+        IUnitOfWork unitOfWork) : ICommandHandler<Command>
     {
         public async Task Handle(Command request, CancellationToken cancellationToken)
         {

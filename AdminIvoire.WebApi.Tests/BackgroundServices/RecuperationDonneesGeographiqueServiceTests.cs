@@ -15,22 +15,22 @@ public class RecuperationDonneesGeographiqueServiceTests
     {
         //Arrange
         var parametrageRepositoryMock = new Mock<IParametrageRepository>();
-        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeDepartements)))
-            .ReturnsAsync(new ParametrageEntity { Key = nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeDepartements), Value = DateTime.UtcNow.ToString() });
+        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeDepartements)))
+            .ReturnsAsync(new ParametrageEntity { Key = nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeDepartements), Value = DateTime.UtcNow.ToString() });
         var senderMock = new Mock<ISender>();
         var services = new ServiceCollection();
         services.AddSingleton(parametrageRepositoryMock.Object);
         services.AddSingleton(senderMock.Object);
         var serviceProvider = services.BuildServiceProvider();
-        var sut = new RecuperationDonneesGeographiqueService(
-            Mock.Of<ILogger<RecuperationDonneesGeographiqueService>>(),
+        var sut = new RecuperationDonneesGeographiqueBackgroundService(
+            Mock.Of<ILogger<RecuperationDonneesGeographiqueBackgroundService>>(),
             serviceProvider);
 
         //Act
         await sut.RecupererDonneesGeoLocaliteAsync(CancellationToken.None);
 
         //Assert
-        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeDepartements)), Times.Once);
+        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeDepartements)), Times.Once);
         senderMock.Verify(x => x.Send(It.IsAny<RecupererCoordonneesGeographiquesDeDepartements.Command>(), It.IsAny<CancellationToken>()),
             Times.Never);
     }
@@ -40,7 +40,7 @@ public class RecuperationDonneesGeographiqueServiceTests
     {
         //Arrange
         var parametrageRepositoryMock = new Mock<IParametrageRepository>();
-        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeDepartements)))
+        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeDepartements)))
             .ReturnsAsync(default(ParametrageEntity));
         var senderMock = new Mock<ISender>();
         senderMock.Setup(x => x.Send(It.IsAny<RecupererCoordonneesGeographiquesDeDepartements.Command>(), It.IsAny<CancellationToken>()))
@@ -49,18 +49,18 @@ public class RecuperationDonneesGeographiqueServiceTests
         services.AddSingleton(parametrageRepositoryMock.Object);
         services.AddSingleton(senderMock.Object);
         var serviceProvider = services.BuildServiceProvider();
-        var sut = new RecuperationDonneesGeographiqueService(
-            Mock.Of<ILogger<RecuperationDonneesGeographiqueService>>(),
+        var sut = new RecuperationDonneesGeographiqueBackgroundService(
+            Mock.Of<ILogger<RecuperationDonneesGeographiqueBackgroundService>>(),
             serviceProvider);
 
         //Act
         await sut.RecupererDonneesGeoLocaliteAsync(CancellationToken.None);
 
         //Assert
-        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeDepartements)), Times.Once);
+        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeDepartements)), Times.Once);
         senderMock.Verify(x => x.Send(It.IsAny<RecupererCoordonneesGeographiquesDeDepartements.Command>(), It.IsAny<CancellationToken>()),
             Times.Once);
-        parametrageRepositoryMock.Verify(x => x.SetParametrageAsync(It.Is<ParametrageEntity>(p => p.Key == nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeDepartements))), Times.Once);
+        parametrageRepositoryMock.Verify(x => x.SetParametrageAsync(It.Is<ParametrageEntity>(p => p.Key == nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeDepartements))), Times.Once);
     }
 
     [Fact]
@@ -68,7 +68,7 @@ public class RecuperationDonneesGeographiqueServiceTests
     {
         //Arrange
         var parametrageRepositoryMock = new Mock<IParametrageRepository>();
-        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeDepartements)))
+        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeDepartements)))
             .ReturnsAsync(default(ParametrageEntity));
         var senderMock = new Mock<ISender>();
         senderMock.Setup(x => x.Send(It.IsAny<RecupererCoordonneesGeographiquesDeDepartements.Command>(), It.IsAny<CancellationToken>()))
@@ -77,15 +77,15 @@ public class RecuperationDonneesGeographiqueServiceTests
         services.AddSingleton(parametrageRepositoryMock.Object);
         services.AddSingleton(senderMock.Object);
         var serviceProvider = services.BuildServiceProvider();
-        var sut = new RecuperationDonneesGeographiqueService(
-            Mock.Of<ILogger<RecuperationDonneesGeographiqueService>>(),
+        var sut = new RecuperationDonneesGeographiqueBackgroundService(
+            Mock.Of<ILogger<RecuperationDonneesGeographiqueBackgroundService>>(),
             serviceProvider);
 
         //Act
         await sut.RecupererDonneesGeoLocaliteAsync(CancellationToken.None);
 
         //Assert
-        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeDepartements)), Times.Once);
+        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeDepartements)), Times.Once);
         senderMock.Verify(x => x.Send(It.IsAny<RecupererCoordonneesGeographiquesDeDepartements.Command>(), It.IsAny<CancellationToken>()),
             Times.Once);
         parametrageRepositoryMock.Verify(x => x.SetParametrageAsync(It.IsAny<ParametrageEntity>()),
@@ -97,22 +97,22 @@ public class RecuperationDonneesGeographiqueServiceTests
     {
         //Arrange
         var parametrageRepositoryMock = new Mock<IParametrageRepository>();
-        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures)))
-            .ReturnsAsync(new ParametrageEntity { Key = nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures), Value = DateTime.UtcNow.ToString() });
+        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures)))
+            .ReturnsAsync(new ParametrageEntity { Key = nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures), Value = DateTime.UtcNow.ToString() });
         var senderMock = new Mock<ISender>();
         var services = new ServiceCollection();
         services.AddSingleton(parametrageRepositoryMock.Object);
         services.AddSingleton(senderMock.Object);
         var serviceProvider = services.BuildServiceProvider();
-        var sut = new RecuperationDonneesGeographiqueService(
-            Mock.Of<ILogger<RecuperationDonneesGeographiqueService>>(),
+        var sut = new RecuperationDonneesGeographiqueBackgroundService(
+            Mock.Of<ILogger<RecuperationDonneesGeographiqueBackgroundService>>(),
             serviceProvider);
 
         //Act
         await sut.RecupererDonneesGeoLocaliteAsync(CancellationToken.None);
 
         //Assert
-        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures)), Times.Once);
+        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures)), Times.Once);
         senderMock.Verify(x => x.Send(It.IsAny<RecupererCoordonneesGeographiquesDeSousPrefectures.Command>(), It.IsAny<CancellationToken>()),
             Times.Never);
     }
@@ -122,7 +122,7 @@ public class RecuperationDonneesGeographiqueServiceTests
     {
         //Arrange
         var parametrageRepositoryMock = new Mock<IParametrageRepository>();
-        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures)))
+        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures)))
             .ReturnsAsync(default(ParametrageEntity));
         var senderMock = new Mock<ISender>();
         senderMock.Setup(x => x.Send(It.IsAny<RecupererCoordonneesGeographiquesDeSousPrefectures.Command>(), It.IsAny<CancellationToken>()))
@@ -131,18 +131,18 @@ public class RecuperationDonneesGeographiqueServiceTests
         services.AddSingleton(parametrageRepositoryMock.Object);
         services.AddSingleton(senderMock.Object);
         var serviceProvider = services.BuildServiceProvider();
-        var sut = new RecuperationDonneesGeographiqueService(
-            Mock.Of<ILogger<RecuperationDonneesGeographiqueService>>(),
+        var sut = new RecuperationDonneesGeographiqueBackgroundService(
+            Mock.Of<ILogger<RecuperationDonneesGeographiqueBackgroundService>>(),
             serviceProvider);
 
         //Act
         await sut.RecupererDonneesGeoLocaliteAsync(CancellationToken.None);
 
         //Assert
-        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures)), Times.Once);
+        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures)), Times.Once);
         senderMock.Verify(x => x.Send(It.IsAny<RecupererCoordonneesGeographiquesDeSousPrefectures.Command>(), It.IsAny<CancellationToken>()),
             Times.Once);
-        parametrageRepositoryMock.Verify(x => x.SetParametrageAsync(It.Is<ParametrageEntity>(p => p.Key == nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures))), Times.Once);
+        parametrageRepositoryMock.Verify(x => x.SetParametrageAsync(It.Is<ParametrageEntity>(p => p.Key == nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures))), Times.Once);
     }
 
     [Fact]
@@ -150,7 +150,7 @@ public class RecuperationDonneesGeographiqueServiceTests
     {
         //Arrange
         var parametrageRepositoryMock = new Mock<IParametrageRepository>();
-        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures)))
+        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures)))
             .ReturnsAsync(default(ParametrageEntity));
         var senderMock = new Mock<ISender>();
         senderMock.Setup(x => x.Send(It.IsAny<RecupererCoordonneesGeographiquesDeSousPrefectures.Command>(), It.IsAny<CancellationToken>()))
@@ -159,15 +159,15 @@ public class RecuperationDonneesGeographiqueServiceTests
         services.AddSingleton(parametrageRepositoryMock.Object);
         services.AddSingleton(senderMock.Object);
         var serviceProvider = services.BuildServiceProvider();
-        var sut = new RecuperationDonneesGeographiqueService(
-            Mock.Of<ILogger<RecuperationDonneesGeographiqueService>>(),
+        var sut = new RecuperationDonneesGeographiqueBackgroundService(
+            Mock.Of<ILogger<RecuperationDonneesGeographiqueBackgroundService>>(),
             serviceProvider);
 
         //Act
         await sut.RecupererDonneesGeoLocaliteAsync(CancellationToken.None);
 
         //Assert
-        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures)), Times.Once);
+        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures)), Times.Once);
         senderMock.Verify(x => x.Send(It.IsAny<RecupererCoordonneesGeographiquesDeSousPrefectures.Command>(), It.IsAny<CancellationToken>()),
             Times.Once);
         parametrageRepositoryMock.Verify(x => x.SetParametrageAsync(It.IsAny<ParametrageEntity>()), 

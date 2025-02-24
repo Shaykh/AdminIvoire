@@ -9,7 +9,7 @@ public interface ILectureFichierCsvPopulationService
     Task LireFichierCsvPopulationAsync(string cheminFichier, CancellationToken cancellationToken);
 }
 
-public class LectureFichierCsvPopulationService(ILogger<LectureFichierCsvPopulationService> logger,
+public sealed class LectureFichierCsvPopulationService(ILogger<LectureFichierCsvPopulationService> logger,
     ISender sender) : ILectureFichierCsvPopulationService
 {
     readonly string[] ValidPopulationGroup = ["HOMME", "FEMME"];
