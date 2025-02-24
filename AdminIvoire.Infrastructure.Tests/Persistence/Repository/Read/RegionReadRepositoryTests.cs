@@ -92,7 +92,7 @@ public class RegionReadRepositoryTests
         async Task<Region> act() => await sut.GetByIdAsync(Guid.NewGuid(), CancellationToken.None);
 
         // Assert
-        await Assert.ThrowsAsync<DataException>((Func<Task<Region>>)act);
+        await Assert.ThrowsAsync<DataAccessException>((Func<Task<Region>>)act);
     }
 
     [Fact]

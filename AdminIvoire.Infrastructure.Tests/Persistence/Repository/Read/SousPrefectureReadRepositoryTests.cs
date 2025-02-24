@@ -66,7 +66,7 @@ public class SousPrefectureReadRepositoryTests
         async Task<SousPrefecture> act() => await sut.GetByIdAsync(Guid.NewGuid(), CancellationToken.None);
 
         //Assert
-        await Assert.ThrowsAsync<DataException>((Func<Task<SousPrefecture>>)act);
+        await Assert.ThrowsAsync<DataAccessException>((Func<Task<SousPrefecture>>)act);
     }
 
     [Fact]

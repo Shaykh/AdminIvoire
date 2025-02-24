@@ -144,7 +144,7 @@ public class VillageReadRepositoryTests
         async Task act() => await sut.GetByIdAsync(Guid.NewGuid(), CancellationToken.None);
 
         //Assert
-        await Assert.ThrowsAsync<DataException>(act);
+        await Assert.ThrowsAsync<DataAccessException>(act);
     }
 
     [Fact]

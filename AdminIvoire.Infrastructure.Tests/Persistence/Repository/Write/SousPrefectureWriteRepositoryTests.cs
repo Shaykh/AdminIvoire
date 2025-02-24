@@ -147,7 +147,7 @@ public class SousPrefectureWriteRepositoryTests
         async Task act() => await sut.UpdateAsync(sousPrefecture, CancellationToken.None);
 
         // Assert
-        await Assert.ThrowsAsync<DataException>(act);
+        await Assert.ThrowsAsync<DataAccessException>(act);
     }
 
     [Fact]
@@ -236,7 +236,7 @@ public class SousPrefectureWriteRepositoryTests
         async Task act() => await sut.UpdateSuperficieAsync(sousPrefecture.Nom, 0, CancellationToken.None);
 
         // Assert
-        await Assert.ThrowsAsync<DataException>(act);
+        await Assert.ThrowsAsync<DataAccessException>(act);
     }
 
     [Fact]
@@ -325,7 +325,7 @@ public class SousPrefectureWriteRepositoryTests
         async Task act() => await sut.UpdatePopulationAsync(sousPrefecture.Nom, 0, CancellationToken.None);
 
         // Assert
-        await Assert.ThrowsAsync<DataException>(act);
+        await Assert.ThrowsAsync<DataAccessException>(act);
     }
 
     [Fact]
@@ -423,7 +423,7 @@ public class SousPrefectureWriteRepositoryTests
         async Task act() => await sut.UpdateCoordonneesGeographiquesAsync(sousPrefecture.Nom, coordonneesGeographiques, CancellationToken.None);
 
         // Assert
-        await Assert.ThrowsAsync<DataException>(act);
+        await Assert.ThrowsAsync<DataAccessException>(act);
     }
 
     [Fact]
@@ -483,6 +483,6 @@ public class SousPrefectureWriteRepositoryTests
         async Task act() => await sut.RemoveAsync(Guid.NewGuid(), CancellationToken.None);
 
         // Assert
-        await Assert.ThrowsAsync<DataException>(act);
+        await Assert.ThrowsAsync<DataAccessException>(act);
     }
 }

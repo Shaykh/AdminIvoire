@@ -20,7 +20,7 @@ public class RegionReadRepository(LocaliteContext dbContext) : LocaliteReadRepos
             .Include(r => r.Departements)
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken)
-            ?? throw new DataException($"Aucune région avec id {id} n'a été trouvée.");
+            ?? throw new DataAccessException($"Aucune région avec id {id} n'a été trouvée.");
     }
 
     public override async Task<IList<Region>> GetAllAsync(CancellationToken cancellationToken)

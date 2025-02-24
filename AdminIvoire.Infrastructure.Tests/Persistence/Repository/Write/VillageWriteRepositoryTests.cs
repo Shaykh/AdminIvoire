@@ -163,7 +163,7 @@ public class VillageWriteRepositoryTests
         async Task act() => await sut.UpdateAsync(village, CancellationToken.None);
 
         // Assert
-        await Assert.ThrowsAsync<DataException>(act);
+        await Assert.ThrowsAsync<DataAccessException>(act);
     }
 
     [Fact]
@@ -266,7 +266,7 @@ public class VillageWriteRepositoryTests
         async Task act() => await sut.UpdateSuperficieAsync(village.Nom, 0, CancellationToken.None);
 
         // Assert
-        await Assert.ThrowsAsync<DataException>(act);
+        await Assert.ThrowsAsync<DataAccessException>(act);
     }
 
     [Fact]
@@ -369,7 +369,7 @@ public class VillageWriteRepositoryTests
         async Task act() => await sut.UpdatePopulationAsync(village.Nom, 0, CancellationToken.None);
 
         // Assert
-        await Assert.ThrowsAsync<DataException>(act);
+        await Assert.ThrowsAsync<DataAccessException>(act);
     }
 
     [Fact]
@@ -481,7 +481,7 @@ public class VillageWriteRepositoryTests
         async Task act() => await sut.UpdateCoordonneesGeographiquesAsync(village.Nom, coordonneesGeographiques, CancellationToken.None);
 
         // Assert
-        await Assert.ThrowsAsync<DataException>(act);
+        await Assert.ThrowsAsync<DataAccessException>(act);
     }
 
     [Fact]
@@ -549,6 +549,6 @@ public class VillageWriteRepositoryTests
         async Task act() => await sut.RemoveAsync(Guid.NewGuid(), CancellationToken.None);
 
         // Assert
-        await Assert.ThrowsAsync<DataException>(act);
+        await Assert.ThrowsAsync<DataAccessException>(act);
     }
 }

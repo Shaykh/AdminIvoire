@@ -60,7 +60,7 @@ public class DepartementReadRepositoryTests
         async Task<Departement> act() => await sut.GetByIdAsync(Guid.NewGuid(), CancellationToken.None);
 
         //Assert
-        await Assert.ThrowsAsync<DataException>((Func<Task<Departement>>)act);
+        await Assert.ThrowsAsync<DataAccessException>((Func<Task<Departement>>)act);
     }
 
     [Fact]
