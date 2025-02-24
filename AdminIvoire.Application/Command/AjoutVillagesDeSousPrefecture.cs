@@ -51,8 +51,7 @@ public static class AjoutVillagesDeSousPrefecture
                 var village = new Village
                 {
                     Nom = villageName,
-                    SousPrefectureId = sousPrefecture.Id,
-                    SousPrefecture = sousPrefecture
+                    SousPrefectureId = sousPrefecture.Id
                 };
                 if (sousPrefecture.AddVillage(village))
                 {

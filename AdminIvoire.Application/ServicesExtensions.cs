@@ -1,5 +1,7 @@
-﻿using AdminIvoire.Application.Services;
+﻿using AdminIvoire.Application.Command;
+using AdminIvoire.Application.Services;
 using AdminIvoire.Domain.Factory;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AdminIvoire.Application;
@@ -17,7 +19,14 @@ public static class ServicesExtensions
 
         services.AddScoped<ILectureFichierCsvPopulationService, LectureFichierCsvPopulationService>();
         services.AddFactories();
+        services.AddValidators();
 
+        return services;
+    }
+
+    public static IServiceCollection AddValidators(this IServiceCollection services)
+    {
+        services.AddTransient<IValidator<AjoutVillagesDeSousPrefecture.Command>, AjoutVillagesDeSousPrefecture.Validator>();
         return services;
     }
 

@@ -1,0 +1,21 @@
+﻿using AdminIvoire.Application.Command;
+using Carter;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+
+namespace AdminIvoire.WebApi.Features;
+
+public class AdminWebModule : ICarterModule
+{
+    //Todo : routes à securiser
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapPost("/admin/sousprefectures/{sousPrefectureId:guid}/villages", async (Guid sousPrefectureId, [FromBody]IEnumerable<string> villages,
+            ISender sender) =>
+        {
+            var command = new AjoutVillagesDeSousPrefecture.Command(sousPrefectureId, [.. villages]);
+            
+            await sender.Send(command);
+        }).WithOpenApi();
+    }
+}

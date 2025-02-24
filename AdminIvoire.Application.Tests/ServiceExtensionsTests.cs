@@ -1,5 +1,7 @@
-﻿using AdminIvoire.Application.Services;
+﻿using AdminIvoire.Application.Command;
+using AdminIvoire.Application.Services;
 using AdminIvoire.Domain.Factory;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -48,5 +50,16 @@ public class ServiceExtensionsTests
         Assert.Contains(services, x => x.ServiceType == typeof(IDepartementFactory) && x.ImplementationType == typeof(DepartementFactory));
         Assert.Contains(services, x => x.ServiceType == typeof(ISousPrefectureFactory) && x.ImplementationType == typeof(SousPrefectureFactory));
         Assert.Contains(services, x => x.ServiceType == typeof(ICommuneFactory) && x.ImplementationType == typeof(CommuneFactory));
+    }
+
+    [Fact]
+    public void GivenServiceCollection_WhenAddApplication_ThenAddValidators()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        // Act
+        services.AddApplication();
+        // Assert
+        Assert.Contains(services, x => x.ServiceType == typeof(IValidator<AjoutVillagesDeSousPrefecture.Command>) && x.ImplementationType == typeof(AjoutVillagesDeSousPrefecture.Validator));
     }
 }

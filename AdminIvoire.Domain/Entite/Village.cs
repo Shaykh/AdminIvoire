@@ -3,5 +3,5 @@
 public class Village : Localite
 {
     public Guid SousPrefectureId { get; set; }
-    public required SousPrefecture SousPrefecture { get; set; }
+    public SousPrefecture? SousPrefecture { get; set; }
 }
