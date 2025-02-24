@@ -16,8 +16,8 @@ public class InitialisationDonneesLocalitePopulationServiceTests
     public async Task GivenReadLocaliteDataAsync_WhenNoFileConfiguration_ThenThrowsException()
     {
         //Arrange
-        var sut = new InitialisationDonneesLocalitePopulationService(
-            Mock.Of<ILogger<InitialisationDonneesLocalitePopulationService>>(),
+        var sut = new InitialisationDonneesLocalitePopulationBackgroundService(
+            Mock.Of<ILogger<InitialisationDonneesLocalitePopulationBackgroundService>>(),
             Mock.Of<IServiceProvider>(),
             new ConfigurationBuilder().Build(),
             Mock.Of<IWebHostEnvironment>());
@@ -41,16 +41,16 @@ public class InitialisationDonneesLocalitePopulationServiceTests
         var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
         webHostEnvironmentMock.Setup(x => x.WebRootPath).Returns("wwwroot");
         var parametrageRepositoryMock = new Mock<IParametrageRepository>();
-        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(InitialisationDonneesLocalitePopulationService)))
-            .ReturnsAsync(new ParametrageEntity { Key = nameof(InitialisationDonneesLocalitePopulationService), Value = DateTime.UtcNow.ToString() });
+        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(InitialisationDonneesLocalitePopulationBackgroundService)))
+            .ReturnsAsync(new ParametrageEntity { Key = nameof(InitialisationDonneesLocalitePopulationBackgroundService), Value = DateTime.UtcNow.ToString() });
         var lectureFichierCsvPopulationServiceMock = new Mock<ILectureFichierCsvPopulationService>();
         lectureFichierCsvPopulationServiceMock.Setup(x => x.LireFichierCsvPopulationAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
         var services = new ServiceCollection();
         services.AddSingleton(parametrageRepositoryMock.Object);
         services.AddSingleton(lectureFichierCsvPopulationServiceMock.Object);
         var serviceProvider = services.BuildServiceProvider();
-        var sut = new InitialisationDonneesLocalitePopulationService(
-            Mock.Of<ILogger<InitialisationDonneesLocalitePopulationService>>(),
+        var sut = new InitialisationDonneesLocalitePopulationBackgroundService(
+            Mock.Of<ILogger<InitialisationDonneesLocalitePopulationBackgroundService>>(),
             serviceProvider,
             configuration,
             webHostEnvironmentMock.Object);
@@ -59,7 +59,7 @@ public class InitialisationDonneesLocalitePopulationServiceTests
         await sut.LireDonneesLocaliteAsync(CancellationToken.None);
 
         //Assert
-        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(InitialisationDonneesLocalitePopulationService)), Times.Once);
+        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(InitialisationDonneesLocalitePopulationBackgroundService)), Times.Once);
         lectureFichierCsvPopulationServiceMock.Verify(x => x.LireFichierCsvPopulationAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), 
             Times.Never);
     }
@@ -76,7 +76,7 @@ public class InitialisationDonneesLocalitePopulationServiceTests
         var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
         webHostEnvironmentMock.Setup(x => x.WebRootPath).Returns("wwwroot");
         var parametrageRepositoryMock = new Mock<IParametrageRepository>();
-        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(InitialisationDonneesLocalitePopulationService)))
+        parametrageRepositoryMock.Setup(x => x.GetParametrageAsync(nameof(InitialisationDonneesLocalitePopulationBackgroundService)))
             .ReturnsAsync(default(ParametrageEntity));
         var lectureFichierCsvPopulationServiceMock = new Mock<ILectureFichierCsvPopulationService>();
         lectureFichierCsvPopulationServiceMock.Setup(x => x.LireFichierCsvPopulationAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
@@ -84,8 +84,8 @@ public class InitialisationDonneesLocalitePopulationServiceTests
         services.AddSingleton(parametrageRepositoryMock.Object);
         services.AddSingleton(lectureFichierCsvPopulationServiceMock.Object);
         var serviceProvider = services.BuildServiceProvider();
-        var sut = new InitialisationDonneesLocalitePopulationService(
-            Mock.Of<ILogger<InitialisationDonneesLocalitePopulationService>>(),
+        var sut = new InitialisationDonneesLocalitePopulationBackgroundService(
+            Mock.Of<ILogger<InitialisationDonneesLocalitePopulationBackgroundService>>(),
             serviceProvider,
             configuration,
             webHostEnvironmentMock.Object);
@@ -94,8 +94,8 @@ public class InitialisationDonneesLocalitePopulationServiceTests
         await sut.LireDonneesLocaliteAsync(CancellationToken.None);
 
         //Assert
-        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(InitialisationDonneesLocalitePopulationService)), Times.Once);
-        parametrageRepositoryMock.Verify(x => x.SetParametrageAsync(It.Is<ParametrageEntity>(p => p.Key == nameof(InitialisationDonneesLocalitePopulationService))), Times.Once);
+        parametrageRepositoryMock.Verify(x => x.GetParametrageAsync(nameof(InitialisationDonneesLocalitePopulationBackgroundService)), Times.Once);
+        parametrageRepositoryMock.Verify(x => x.SetParametrageAsync(It.Is<ParametrageEntity>(p => p.Key == nameof(InitialisationDonneesLocalitePopulationBackgroundService))), Times.Once);
         lectureFichierCsvPopulationServiceMock.Verify(x => x.LireFichierCsvPopulationAsync(It.Is<string>(s => s.Contains("data.csv")), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

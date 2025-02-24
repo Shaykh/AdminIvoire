@@ -4,8 +4,8 @@ public static class ServicesExtensions
 {
     public static IServiceCollection AddBackgroundServices(this IServiceCollection services)
     {
-        services.AddHostedService<InitialisationDonneesLocalitePopulationService>();
-        services.AddHostedService<RecuperationDonneesGeographiqueService>();
+        services.AddHostedService<InitialisationDonneesLocalitePopulationBackgroundService>();
+        services.AddHostedService<RecuperationDonneesGeographiqueBackgroundService>();
 
         return services;
     }
