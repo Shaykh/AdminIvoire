@@ -66,7 +66,7 @@ public class CommuneReadRepositoryTests
         async Task<Commune> act() => await sut.GetByIdAsync(Guid.NewGuid(), CancellationToken.None);
 
         //Assert
-        await Assert.ThrowsAsync<DataException>((Func<Task<Commune>>)act);
+        await Assert.ThrowsAsync<DataAccessException>((Func<Task<Commune>>)act);
     }
 
     [Fact]

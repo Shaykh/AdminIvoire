@@ -21,7 +21,7 @@ public class DepartementReadRepository(LocaliteContext dbContext) : LocaliteRead
             .Include(d => d.SousPrefectures)
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken)
-            ?? throw new DataException($"Aucun département avec id {id} n'a été trouvé.");
+            ?? throw new DataAccessException($"Aucun département avec id {id} n'a été trouvé.");
     }
 
     public override async Task<IList<Departement>> GetAllAsync(CancellationToken cancellationToken)

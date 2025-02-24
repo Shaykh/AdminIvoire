@@ -20,6 +20,6 @@ public class SousPrefectureReadRepository(LocaliteContext dbContext) : LocaliteR
             .Include(sp => sp.Villages)
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken)
-            ?? throw new DataException($"Aucune sous-préfecture avec id {id} n'a été trouvée.");
+            ?? throw new DataAccessException($"Aucune sous-préfecture avec id {id} n'a été trouvée.");
     }
 }

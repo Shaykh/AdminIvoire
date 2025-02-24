@@ -17,6 +17,6 @@ public class VillageReadRepository(LocaliteContext dbContext) : LocaliteReadRepo
     {
         return await DbContext.Villages
             .FindAsync([id], cancellationToken)
-            ?? throw new DataException($"Aucun village avec id {id} n'a été trouvé.");
+            ?? throw new DataAccessException($"Aucun village avec id {id} n'a été trouvé.");
     }
 }

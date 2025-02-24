@@ -12,7 +12,7 @@ public class DistrictReadRepository(LocaliteContext dbContext) : LocaliteReadRep
             .Include(d => d.Regions)
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken)
-            ?? throw new DataException($"Aucun district avec id {id} n'a été trouvé.");
+            ?? throw new DataAccessException($"Aucun district avec id {id} n'a été trouvé.");
     }
 
     public override async Task<IList<District>> GetAllAsync(CancellationToken cancellationToken)

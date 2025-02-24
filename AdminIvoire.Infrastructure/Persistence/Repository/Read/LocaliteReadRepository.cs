@@ -19,7 +19,7 @@ public abstract class LocaliteReadRepository<T>(LocaliteContext dbContext) where
         return await DbContext.Set<T>()
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken)
-            ?? throw new DataException($"Aucune entité de type {typeof(T).Name} avec id {id} n'a été trouvée.");
+            ?? throw new DataAccessException($"Aucune entité de type {typeof(T).Name} avec id {id} n'a été trouvée.");
     }
 
     public virtual async Task<T?> GetByNomAsync(string nom, CancellationToken cancellationToken)

@@ -47,7 +47,7 @@ public class DistrictReadRepositoryTests
         async Task<District> act() => await sut.GetByIdAsync(Guid.NewGuid(), CancellationToken.None);
 
         //Assert
-        await Assert.ThrowsAsync<DataException>(act);
+        await Assert.ThrowsAsync<DataAccessException>(act);
     }
 
     [Fact]

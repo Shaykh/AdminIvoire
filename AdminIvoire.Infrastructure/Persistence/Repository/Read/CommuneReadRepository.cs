@@ -20,6 +20,6 @@ public class CommuneReadRepository(LocaliteContext dbContext) : LocaliteReadRepo
             .Include(c => c.Villages)
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken)
-            ?? throw new DataException($"Aucune commune avec id {id} n'a été trouvée.");
+            ?? throw new DataAccessException($"Aucune commune avec id {id} n'a été trouvée.");
     }
 }
