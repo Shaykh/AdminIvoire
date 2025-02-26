@@ -9,7 +9,6 @@ public class LocaliteContext(DbContextOptions<LocaliteContext> options) : DbCont
 {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new CommuneEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new DepartementEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new DistrictEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new RegionEntityTypeConfiguration());
@@ -23,7 +22,6 @@ public class LocaliteContext(DbContextOptions<LocaliteContext> options) : DbCont
     public DbSet<Region> Regions { get; set; }
     public DbSet<Departement> Departements { get; set; }
     public DbSet<SousPrefecture> SousPrefectures { get; set; }
-    public DbSet<Commune> Communes { get; set; }
     public DbSet<Village> Villages { get; set; }
 
     public DbSet<ParametrageEntity> Parametrages { get; set; }

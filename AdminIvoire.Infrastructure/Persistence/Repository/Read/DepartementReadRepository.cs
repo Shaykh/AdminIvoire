@@ -17,7 +17,6 @@ public class DepartementReadRepository(LocaliteContext dbContext) : LocaliteRead
     public override async Task<Departement> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await DbContext.Departements
-            .Include(d => d.Communes)
             .Include(d => d.SousPrefectures)
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken)
