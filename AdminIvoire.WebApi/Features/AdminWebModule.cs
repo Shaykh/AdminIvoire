@@ -7,7 +7,6 @@ namespace AdminIvoire.WebApi.Features;
 
 public class AdminWebModule : ICarterModule
 {
-    //Todo : routes à securiser
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPost("/admin/sousprefectures/{sousPrefectureId:guid}/villages", async (Guid sousPrefectureId, [FromBody]IEnumerable<string> villages,
@@ -16,6 +15,9 @@ public class AdminWebModule : ICarterModule
             var command = new AjoutVillagesDeSousPrefecture.Command(sousPrefectureId, [.. villages]);
             
             await sender.Send(command);
-        }).WithOpenApi();
+        })
+            .RequireAuthorization()
+            .WithName("AjoutVillagesDeSousPrefecture")
+            .WithOpenApi();
     }
 }
