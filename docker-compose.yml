@@ -23,15 +23,30 @@ services:
     container_name: adminivoire.db
     restart: always
     environment:
-      POSTGRES_USER: adminivoire
+      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: adminivoire
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
         - "5432:5432"
     volumes:
         - adminivoire.db-data:/var/lib/postgresql/data
     networks:
         - adminivoire
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: adminivoire.keycloak
+    command: start-dev
+    environment:
+       - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+       - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+       - KC_HEALTH_ENABLED=true
+    volumes:
+       - ./.containers/identity:/opt/keycloak/data
+    ports:
+       - "18080:8080" 
+    networks:
+       - adminivoire
 
 networks:
       adminivoire:
