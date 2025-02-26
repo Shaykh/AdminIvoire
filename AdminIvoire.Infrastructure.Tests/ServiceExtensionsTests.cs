@@ -50,7 +50,6 @@ public class ServiceExtensionsTests
 
         // Assert
         Assert.Contains(services, x => x.ServiceType == typeof(IVillageReadRepository) && x.ImplementationType == typeof(VillageReadRepository));
-        Assert.Contains(services, x => x.ServiceType == typeof(ICommuneReadRepository) && x.ImplementationType == typeof(CommuneReadRepository));
         Assert.Contains(services, x => x.ServiceType == typeof(ISousPrefectureReadRepository) && x.ImplementationType == typeof(SousPrefectureReadRepository));
         Assert.Contains(services, x => x.ServiceType == typeof(IDepartementReadRepository) && x.ImplementationType == typeof(DepartementReadRepository));
         Assert.Contains(services, x => x.ServiceType == typeof(IRegionReadRepository) && x.ImplementationType == typeof(RegionReadRepository));
@@ -73,7 +72,6 @@ public class ServiceExtensionsTests
 
         // Assert
         Assert.Contains(services, x => x.ServiceType == typeof(IVillageWriteRepository) && x.ImplementationType == typeof(VillageWriteRepository));
-        Assert.Contains(services, x => x.ServiceType == typeof(ICommuneWriteRepository) && x.ImplementationType == typeof(CommuneWriteRepository));
         Assert.Contains(services, x => x.ServiceType == typeof(ISousPrefectureWriteRepository) && x.ImplementationType == typeof(SousPrefectureWriteRepository));
         Assert.Contains(services, x => x.ServiceType == typeof(IDepartementWriteRepository) && x.ImplementationType == typeof(DepartementWriteRepository));
         Assert.Contains(services, x => x.ServiceType == typeof(IRegionWriteRepository) && x.ImplementationType == typeof(RegionWriteRepository));

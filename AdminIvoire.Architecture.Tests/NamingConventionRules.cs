@@ -72,7 +72,7 @@ public class NamingConventionRules
     [Fact]
     public void Factories_ShouldEndWith_Factory()
     {
-        var result = Types.InAssembly(typeof(Domain.Entite.Commune).Assembly)
+        var result = Types.InAssembly(typeof(Domain.Entite.Village).Assembly)
             .That()
             .AreClasses()
             .And()

@@ -36,7 +36,6 @@ public static class ServicesExtensions
         services.AddScoped<IRegionFactory, RegionFactory>();
         services.AddScoped<IDepartementFactory, DepartementFactory>();
         services.AddScoped<ISousPrefectureFactory, SousPrefectureFactory>();
-        services.AddScoped<ICommuneFactory, CommuneFactory>();
 
         return services;
     }

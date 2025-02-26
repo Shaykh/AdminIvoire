@@ -42,7 +42,6 @@ public static class ServicesExtensions
 
     public static IServiceCollection AddReadRepositories(this IServiceCollection services)
     {
-        services.AddScoped<ICommuneReadRepository, CommuneReadRepository>();
         services.AddScoped<IDepartementReadRepository, DepartementReadRepository>();
         services.AddScoped<IDistrictReadRepository, DistrictReadRepository>();
         services.AddScoped<IRegionReadRepository, RegionReadRepository>();
@@ -54,7 +53,6 @@ public static class ServicesExtensions
 
     public static IServiceCollection AddWriteRepositories(this IServiceCollection services)
     {
-        services.AddScoped<ICommuneWriteRepository, CommuneWriteRepository>();
         services.AddScoped<IDepartementWriteRepository, DepartementWriteRepository>();
         services.AddScoped<IDistrictWriteRepository, DistrictWriteRepository>();
         services.AddScoped<IRegionWriteRepository, RegionWriteRepository>();

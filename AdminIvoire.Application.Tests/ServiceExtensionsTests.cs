@@ -49,7 +49,6 @@ public class ServiceExtensionsTests
         Assert.Contains(services, x => x.ServiceType == typeof(IRegionFactory) && x.ImplementationType == typeof(RegionFactory));
         Assert.Contains(services, x => x.ServiceType == typeof(IDepartementFactory) && x.ImplementationType == typeof(DepartementFactory));
         Assert.Contains(services, x => x.ServiceType == typeof(ISousPrefectureFactory) && x.ImplementationType == typeof(SousPrefectureFactory));
-        Assert.Contains(services, x => x.ServiceType == typeof(ICommuneFactory) && x.ImplementationType == typeof(CommuneFactory));
     }
 
     [Fact]
