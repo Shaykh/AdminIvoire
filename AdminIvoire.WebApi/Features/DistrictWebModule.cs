@@ -4,9 +4,9 @@ using MediatR;
 
 namespace AdminIvoire.WebApi.Features;
 
-public class DistrictWebModule : CarterModule
+public class DistrictWebModule : ICarterModule
 {
-    public override void AddRoutes(IEndpointRouteBuilder app)
+    public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapGet("/api/districts", async (IMediator mediator) =>
         {
@@ -21,5 +21,11 @@ public class DistrictWebModule : CarterModule
             var district = await mediator.Send(new GetDistrictById.Query(id));
             return Results.Ok(district);
         }).WithName("Get district by Id").WithOpenApi();
+
+        app.MapGet("/api/districts/{id:guid}/regions", async (IMediator mediator, Guid id) =>
+        {
+            var regions = await mediator.Send(new GetRegionsByDistrictId.Query(id));
+            return Results.Ok(regions);
+        }).WithName("Get regions by district Id").WithOpenApi();
     }
 }
