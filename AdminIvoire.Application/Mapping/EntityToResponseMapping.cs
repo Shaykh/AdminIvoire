@@ -22,4 +22,25 @@ public static class EntityToResponseMapping
 
         return new GetDistrictResponse(entity.Id, entity.Nom, entity.Superficie, entity.Population, regions);
     }
+
+    public static GetRegionResponse MapToResponse(this Region entity)
+    {
+        var departements = entity.Departements.Select(departement => departement.MapToDto());
+
+        return new GetRegionResponse(entity.Id, entity.Nom, entity.Superficie, entity.Population, departements);
+    }
+
+    public static GetDepartementResponse MapToResponse(this Departement entity)
+    {
+        var sousPrefectures = entity.SousPrefectures.Select(commune => commune.MapToDto());
+
+        return new GetDepartementResponse(entity.Id, entity.Nom, entity.Superficie, entity.Population, sousPrefectures, entity.CoordonneesGeographiques!.MapToDto());
+    }
+
+    public static GetSousPrefectureResponse MapToResponse(this SousPrefecture entity)
+    {
+        var villages = entity.Villages.Select(village => village.MapToDto());
+
+        return new GetSousPrefectureResponse(entity.Id, entity.Nom, entity.Superficie, entity.Population, villages, entity.CoordonneesGeographiques!.MapToDto());
+    }
 }

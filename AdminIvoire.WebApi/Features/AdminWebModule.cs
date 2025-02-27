@@ -19,7 +19,6 @@ public class AdminWebModule : ICarterModule
 
             return Results.Ok("Les villages ont été ajoutés avec succès.");
         })
-            .RequireAuthorization()
             .WithName("AjoutVillagesDeSousPrefecture")
             .WithOpenApi();
     }
