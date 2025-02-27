@@ -1,7 +1,6 @@
 ﻿using AdminIvoire.Application.Command;
 using Carter;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminIvoire.WebApi.Features;
