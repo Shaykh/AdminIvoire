@@ -1,6 +1,7 @@
 ﻿using AdminIvoire.Application.Command;
 using Carter;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminIvoire.WebApi.Features;
@@ -15,6 +16,8 @@ public class AdminWebModule : ICarterModule
             var command = new AjoutVillagesDeSousPrefecture.Command(sousPrefectureId, [.. villages]);
             
             await sender.Send(command);
+
+            return Results.Ok("Les villages ont été ajoutés avec succès.");
         })
             .RequireAuthorization()
             .WithName("AjoutVillagesDeSousPrefecture")
