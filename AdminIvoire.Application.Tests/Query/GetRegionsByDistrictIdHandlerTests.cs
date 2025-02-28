@@ -6,40 +6,34 @@ using Moq;
 
 namespace AdminIvoire.Application.Tests.Query;
 
-public class GetAllRegionsTests
+public class GetRegionsByDistrictIdHandlerTests
 {
     [Fact]
-    public async Task GivenHandle_WhenCalled_ThenReturnAllRegions()
+    public async Task GivenHandle_WhenCalled_ThenReturnAllRegionsOfDistrict()
     {
         // Arrange
-        var loggerMock = new Mock<ILogger<GetAllRegions.Handler>>();
+        var loggerMock = new Mock<ILogger<GetRegionsByDistrictId.Handler>>();
         var regionReadRepositoryMock = new Mock<IRegionReadRepository>();
-        List<Region> regions = GetRegionsForTests();
-        regionReadRepositoryMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync(regions);
-        var handler = new GetAllRegions.Handler(loggerMock.Object, regionReadRepositoryMock.Object);
+        var ditrictId = Guid.NewGuid();
+        List<Region> regions = GetRegionsForTests(ditrictId);
+        regionReadRepositoryMock.Setup(r => r.GetAllByDistrictIdAsync(ditrictId, It.IsAny<CancellationToken>())).ReturnsAsync(regions);
+        var handler = new GetRegionsByDistrictId.Handler(loggerMock.Object, regionReadRepositoryMock.Object);
 
         // Act
-        var result = await handler.Handle(new GetAllRegions.Query(), CancellationToken.None);
+        var result = await handler.Handle(new GetRegionsByDistrictId.Query(ditrictId), CancellationToken.None);
 
         // Assert
         Assert.NotNull(result);
         Assert.Equal(regions.Count, result.Count());
-        regionReadRepositoryMock.Verify(r => r.GetAllAsync(CancellationToken.None), Times.Once);
+        regionReadRepositoryMock.Verify(r => r.GetAllByDistrictIdAsync(ditrictId, CancellationToken.None), Times.Once);
     }
 
-    private static List<Region> GetRegionsForTests()
+    private static List<Region> GetRegionsForTests(Guid districtId)
     {
         var district1 = new District
         {
-            Id = Guid.NewGuid(),
+            Id = districtId,
             Nom = "District 1",
-            Superficie = 100,
-            Population = 1000,
-        };
-        var district2 = new District
-        {
-            Id = Guid.NewGuid(),
-            Nom = "District 2",
             Superficie = 100,
             Population = 1000,
         };
@@ -57,7 +51,7 @@ public class GetAllRegionsTests
             Nom = "Region 2",
             Superficie = 200,
             Population = 2000,
-            District = district2
+            District = district1
         };
         var region3 = new Region
         {

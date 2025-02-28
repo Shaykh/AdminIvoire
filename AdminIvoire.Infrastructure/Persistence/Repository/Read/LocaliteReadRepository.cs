@@ -11,6 +11,7 @@ public abstract class LocaliteReadRepository<T>(LocaliteContext dbContext) where
     {
         return await DbContext.Set<T>()
             .AsNoTracking()
+            .OrderBy(x => x.Nom)
             .ToListAsync(cancellationToken);
     }
 
@@ -33,6 +34,7 @@ public abstract class LocaliteReadRepository<T>(LocaliteContext dbContext) where
         return await DbContext.Set<T>()
             .AsNoTracking()
             .Select(x => x.Nom)
+            .OrderBy(x => x)
             .ToListAsync(cancellationToken);
     }
 }

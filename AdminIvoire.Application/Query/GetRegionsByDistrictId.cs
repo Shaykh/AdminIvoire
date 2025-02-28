@@ -8,6 +8,7 @@ namespace AdminIvoire.Application.Query;
 public static class GetRegionsByDistrictId
 {
     public record Query(Guid DistrictId) : IQuery<IEnumerable<GetRegionResponse>>;
+
     public class Handler(ILogger<Handler> logger,
         IRegionReadRepository regionReadRepository) : IQueryHandler<Query, IEnumerable<GetRegionResponse>>
     {

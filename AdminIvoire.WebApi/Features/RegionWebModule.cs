@@ -11,14 +11,22 @@ public class RegionWebModule : ICarterModule
         app.MapGet("/api/regions", async (IMediator mediator) =>
         {
             var regions = await mediator.Send(new GetAllRegions.Query());
-            return Results.Ok(regions);
+            return regions;
         }).WithName("Get all regions")
             .WithOpenApi();
 
         app.MapGet("/api/regions/{id:guid}", async (IMediator mediator, Guid id) =>
         {
             var region = await mediator.Send(new GetRegionById.Query(id));
-            return Results.Ok(region);
-        }).WithName("Get region by Id").WithOpenApi();
+            return region;
+        }).WithName("Get region by Id")
+            .WithOpenApi();
+
+        app.MapGet("/api/regions/{id:guid}/departements", async (IMediator mediator, Guid id) =>
+        {
+            var departements = await mediator.Send(new GetDepartementsByRegionId.Query(id));
+            return departements;
+        }).WithName("Get departements by region Id")
+            .WithOpenApi();
     }
 }

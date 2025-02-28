@@ -6,7 +6,7 @@ using Moq;
 
 namespace AdminIvoire.Application.Tests.Query;
 
-public class GetRegionByIdTests
+public class GetRegionByIdHandlerTests
 {
     [Fact]
     public async Task GivenHandle_WhenCalled_ThenReturnRegion()
