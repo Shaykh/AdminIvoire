@@ -13,7 +13,11 @@ public static class EntityToResponseMapping
 
     public static LocaliteDto MapToDto(this Localite entity)
     {
-        return new LocaliteDto(entity.Id, entity.Nom, entity.Superficie, entity.Population, entity.CoordonneesGeographiques?.MapToDto());
+        return new LocaliteDto(entity.Id, 
+            entity.Nom, 
+            entity.Superficie, 
+            entity.Population, 
+            entity.CoordonneesGeographiques?.MapToDto());
     }
 
     public static GetDistrictResponse MapToResponse(this District entity)
@@ -27,20 +31,57 @@ public static class EntityToResponseMapping
     {
         var departements = entity.Departements.Select(departement => departement.MapToDto());
 
-        return new GetRegionResponse(entity.Id, entity.Nom, entity.Superficie, entity.Population, departements);
+        return new GetRegionResponse(entity.Id, 
+            entity.Nom, 
+            entity.Superficie, 
+            entity.Population,
+            entity.DistrictId,
+            entity.District.Nom,
+            departements);
     }
 
     public static GetDepartementResponse MapToResponse(this Departement entity)
     {
         var sousPrefectures = entity.SousPrefectures.Select(commune => commune.MapToDto());
 
-        return new GetDepartementResponse(entity.Id, entity.Nom, entity.Superficie, entity.Population, sousPrefectures, entity.CoordonneesGeographiques!.MapToDto());
+        return new GetDepartementResponse(entity.Id, 
+            entity.Nom, 
+            entity.Superficie, 
+            entity.Population, 
+            entity.RegionId,
+            entity.Region.Nom, 
+            entity.Region.District.Nom, 
+            sousPrefectures, 
+            entity.CoordonneesGeographiques!.MapToDto());
     }
 
     public static GetSousPrefectureResponse MapToResponse(this SousPrefecture entity)
     {
         var villages = entity.Villages.Select(village => village.MapToDto());
 
-        return new GetSousPrefectureResponse(entity.Id, entity.Nom, entity.Superficie, entity.Population, villages, entity.CoordonneesGeographiques!.MapToDto());
+        return new GetSousPrefectureResponse(entity.Id, 
+            entity.Nom, 
+            entity.Superficie, 
+            entity.Population, 
+            entity.DepartementId,
+            entity.Departement.Nom,
+            entity.Departement.Region.Nom,
+            entity.Departement.Region.District.Nom,
+            villages, 
+            entity.CoordonneesGeographiques!.MapToDto());
+    }
+
+    public static GetVillageResponse MapToResponse(this Village entity)
+    {
+        return new GetVillageResponse(entity.Id,
+            entity.Nom,
+            entity.Superficie,
+            entity.Population,
+            entity.SousPrefectureId,
+            entity.SousPrefecture!.Nom,
+            entity.SousPrefecture.Departement.Nom,
+            entity.SousPrefecture.Departement.Region.Nom,
+            entity.SousPrefecture.Departement.Region.District.Nom,
+            entity.CoordonneesGeographiques!.MapToDto());
     }
 }

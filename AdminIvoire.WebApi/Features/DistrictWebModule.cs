@@ -12,20 +12,22 @@ public class DistrictWebModule : ICarterModule
         {
             var districts = await mediator.Send(new GetAllDistricts.Query());
 
-            return Results.Ok(districts);
+            return districts;
         }).WithName("Get all districts")
             .WithOpenApi();
 
         app.MapGet("/api/districts/{id:guid}", async (IMediator mediator, Guid id) =>
         {
             var district = await mediator.Send(new GetDistrictById.Query(id));
-            return Results.Ok(district);
-        }).WithName("Get district by Id").WithOpenApi();
+            return district;
+        }).WithName("Get district by Id")
+            .WithOpenApi();
 
         app.MapGet("/api/districts/{id:guid}/regions", async (IMediator mediator, Guid id) =>
         {
             var regions = await mediator.Send(new GetRegionsByDistrictId.Query(id));
-            return Results.Ok(regions);
-        }).WithName("Get regions by district Id").WithOpenApi();
+            return regions;
+        }).WithName("Get regions by district Id")
+            .WithOpenApi();
     }
 }

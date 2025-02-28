@@ -9,8 +9,12 @@ public class DepartementReadRepository(LocaliteContext dbContext) : LocaliteRead
     public async Task<IList<Departement>> GetAllByRegionIdAsync(Guid regionId, CancellationToken cancellationToken)
     {
         return await DbContext.Departements
-            .AsNoTracking()
+            .Include(d => d.Region)
+                .ThenInclude(r => r.District)
             .Where(x => x.RegionId == regionId)
+            .AsNoTracking()
+            .AsSplitQuery()
+            .OrderBy(x => x.Nom)
             .ToListAsync(cancellationToken);
     }
 
@@ -18,7 +22,10 @@ public class DepartementReadRepository(LocaliteContext dbContext) : LocaliteRead
     {
         return await DbContext.Departements
             .Include(d => d.SousPrefectures)
+            .Include(d => d.Region)
+                .ThenInclude(r => r.District)
             .AsNoTracking()
+            .AsSplitQuery()
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken)
             ?? throw new DataAccessException($"Aucun département avec id {id} n'a été trouvé.");
     }
@@ -27,6 +34,7 @@ public class DepartementReadRepository(LocaliteContext dbContext) : LocaliteRead
     {
         return await DbContext.Departements
             .AsNoTracking()
+            .OrderBy(x => x.Nom)
             .ToListAsync(cancellationToken);
     }
 }

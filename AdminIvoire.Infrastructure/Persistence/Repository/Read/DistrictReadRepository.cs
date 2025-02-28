@@ -11,6 +11,7 @@ public class DistrictReadRepository(LocaliteContext dbContext) : LocaliteReadRep
         return await DbContext.Districts
             .Include(d => d.Regions)
             .AsNoTracking()
+            .AsSplitQuery()
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken)
             ?? throw new DataAccessException($"Aucun district avec id {id} n'a été trouvé.");
     }
@@ -20,6 +21,8 @@ public class DistrictReadRepository(LocaliteContext dbContext) : LocaliteReadRep
         return await DbContext.Districts
             .Include(d => d.Regions)
             .AsNoTracking()
+            .AsSplitQuery()
+            .OrderBy(x => x.Nom)
             .ToListAsync(cancellationToken);
     }
 }

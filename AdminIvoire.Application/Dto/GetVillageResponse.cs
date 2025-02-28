@@ -1,12 +1,12 @@
 ﻿namespace AdminIvoire.Application.Dto;
 
-public record GetSousPrefectureResponse(Guid Id,
+public record GetVillageResponse(Guid Id,
     string Nom,
     decimal Superficie,
     int Population,
-    Guid DepartementId,
+    Guid SousPrefectureId,
+    string SousPrefectureNom,
     string DepartementNom,
     string RegionNom,
     string DistrictNom,
-    IEnumerable<LocaliteDto> Villages,
     CoordonneesGeographiquesDto CoordonneesGeographiques);
