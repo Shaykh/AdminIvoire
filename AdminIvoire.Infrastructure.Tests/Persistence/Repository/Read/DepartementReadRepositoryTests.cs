@@ -286,6 +286,6 @@ public class DepartementReadRepositoryTests
         await context.Departements.AddAsync(otherDepartement);
         await context.Departements.AddRangeAsync(departementsOfRegion);
         await context.SaveChangesAsync();
-        return (regionId, departementsOfRegion);
+        return (regionId, [..departementsOfRegion.OrderBy(d => d.Nom)]);
     }
 }

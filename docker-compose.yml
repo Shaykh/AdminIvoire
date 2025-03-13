@@ -33,21 +33,6 @@ services:
     networks:
         - adminivoire
 
-  keycloak:
-    image: quay.io/keycloak/keycloak:latest
-    container_name: adminivoire.keycloak
-    command: start-dev
-    environment:
-       - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
-       - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
-       - KC_HEALTH_ENABLED=true
-    volumes:
-       - ./.containers/identity:/opt/keycloak/data
-    ports:
-       - "18080:8080" 
-    networks:
-       - adminivoire
-
 networks:
       adminivoire:
 
