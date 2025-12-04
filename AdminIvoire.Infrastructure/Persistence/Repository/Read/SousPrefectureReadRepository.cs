@@ -6,6 +6,18 @@ namespace AdminIvoire.Infrastructure.Persistence.Repository.Read;
 
 public class SousPrefectureReadRepository(LocaliteContext dbContext) : LocaliteReadRepository<SousPrefecture>(dbContext), ISousPrefectureReadRepository
 {
+    public override async Task<IList<SousPrefecture>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await DbContext.SousPrefectures
+            .Include(sp => sp.Departement)
+                .ThenInclude(d => d.Region)
+                    .ThenInclude(r => r.District)
+            .AsNoTracking()
+            .AsSplitQuery()
+            .OrderBy(x => x.Nom)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<IList<SousPrefecture>> GetAllByDepartementIdAsync(Guid departementId, CancellationToken cancellationToken)
     {
         return await DbContext.SousPrefectures
@@ -30,6 +42,6 @@ public class SousPrefectureReadRepository(LocaliteContext dbContext) : LocaliteR
             .AsNoTracking()
             .AsSplitQuery()
             .SingleOrDefaultAsync(x => x.Id == id, cancellationToken)
-            ?? throw new DataAccessException($"Aucune sous-préfecture avec id {id} n'a été trouvée.");
+            ?? throw new DataAccessException($"Aucune sous-prï¿½fecture avec id {id} n'a ï¿½tï¿½ trouvï¿½e.");
     }
 }

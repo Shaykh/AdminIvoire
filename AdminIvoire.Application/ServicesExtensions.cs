@@ -18,6 +18,7 @@ public static class ServicesExtensions
         });
 
         services.AddScoped<ILectureFichierCsvPopulationService, LectureFichierCsvPopulationService>();
+        services.AddScoped<IVillageWebSourceService, VillageWebSourceService>();
         services.AddFactories();
         services.AddValidators();
 

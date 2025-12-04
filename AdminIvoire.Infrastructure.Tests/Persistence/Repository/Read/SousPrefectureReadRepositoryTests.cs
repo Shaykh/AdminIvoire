@@ -127,6 +127,64 @@ public class SousPrefectureReadRepositoryTests
     }
 
     [Fact]
+    public async Task GivenGetAllAsync_WhenExistingSousPrefectures_ThenLoadNavigationProperties()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<LocaliteContext>()
+            .UseInMemoryDatabase(databaseName: nameof(GivenGetAllAsync_WhenExistingSousPrefectures_ThenLoadNavigationProperties))
+            .Options;
+        using var context = new LocaliteContext(options);
+        var sut = new SousPrefectureReadRepository(context);
+
+        var district = new District
+        {
+            Id = Guid.NewGuid(),
+            Nom = "Test District"
+        };
+        var region = new Region
+        {
+            Id = Guid.NewGuid(),
+            Nom = "Test Region",
+            DistrictId = district.Id,
+            District = district
+        };
+        var departement = new Departement
+        {
+            Id = Guid.NewGuid(),
+            Nom = "Test Departement",
+            RegionId = region.Id,
+            Region = region
+        };
+        var sousPrefecture = new SousPrefecture
+        {
+            Id = Guid.NewGuid(),
+            Nom = "Test Sous-Prefecture",
+            DepartementId = departement.Id,
+            Departement = departement
+        };
+
+        await context.Districts.AddAsync(district);
+        await context.Regions.AddAsync(region);
+        await context.Departements.AddAsync(departement);
+        await context.SousPrefectures.AddAsync(sousPrefecture);
+        await context.SaveChangesAsync();
+
+        //Act
+        var result = await sut.GetAllAsync(CancellationToken.None);
+
+        //Assert
+        Assert.NotEmpty(result);
+        var foundSousPrefecture = result.FirstOrDefault(sp => sp.Id == sousPrefecture.Id);
+        Assert.NotNull(foundSousPrefecture);
+        Assert.NotNull(foundSousPrefecture.Departement);
+        Assert.Equal(departement.Nom, foundSousPrefecture.Departement.Nom);
+        Assert.NotNull(foundSousPrefecture.Departement.Region);
+        Assert.Equal(region.Nom, foundSousPrefecture.Departement.Region.Nom);
+        Assert.NotNull(foundSousPrefecture.Departement.Region.District);
+        Assert.Equal(district.Nom, foundSousPrefecture.Departement.Region.District.Nom);
+    }
+
+    [Fact]
     public async Task GivenGetAllAsync_WhenNoSousPrefecture_ThenReturnEmptyList()
     {
         //Arrange

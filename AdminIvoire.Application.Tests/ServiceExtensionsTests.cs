@@ -61,4 +61,17 @@ public class ServiceExtensionsTests
         // Assert
         Assert.Contains(services, x => x.ServiceType == typeof(IValidator<AjoutVillagesDeSousPrefecture.Command>) && x.ImplementationType == typeof(AjoutVillagesDeSousPrefecture.Validator));
     }
+
+    [Fact]
+    public void GivenServiceCollection_WhenAddApplication_ThenAddVillageWebSourceService()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+
+        // Act
+        services.AddApplication();
+
+        // Assert
+        Assert.Contains(services, x => x.ServiceType == typeof(IVillageWebSourceService) && x.ImplementationType == typeof(VillageWebSourceService));
+    }
 }

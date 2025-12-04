@@ -18,5 +18,6 @@ public class ServiceExtensionsTests
         // Assert
         Assert.Contains(services, x => x.ServiceType == typeof(IHostedService) && x.ImplementationType == typeof(InitialisationDonneesLocalitePopulationBackgroundService));
         Assert.Contains(services, x => x.ServiceType == typeof(IHostedService) && x.ImplementationType == typeof(RecuperationDonneesGeographiqueBackgroundService));
+        Assert.Contains(services, x => x.ServiceType == typeof(IHostedService) && x.ImplementationType == typeof(AjoutVillagesAutomatiqueBackgroundService));
     }
 }

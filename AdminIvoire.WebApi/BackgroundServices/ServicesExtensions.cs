@@ -6,6 +6,7 @@ public static class ServicesExtensions
     {
         services.AddHostedService<InitialisationDonneesLocalitePopulationBackgroundService>();
         services.AddHostedService<RecuperationDonneesGeographiqueBackgroundService>();
+        services.AddHostedService<AjoutVillagesAutomatiqueBackgroundService>();
 
         return services;
     }
