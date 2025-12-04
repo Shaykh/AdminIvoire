@@ -11,4 +11,11 @@ public static class ServicesExtensions
 
         return services;
     }
+
+    public static IServiceCollection AddOpenStreetMapApiClient(this IServiceCollection services)
+    {
+        services.AddHttpClient<IOpenStreetMapApiClient, OpenStreetMapApiClient>();
+
+        return services;
+    }
 }

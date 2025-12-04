@@ -3,6 +3,7 @@ using AdminIvoire.Application.Parametrage;
 using AdminIvoire.Domain.Repository;
 using AdminIvoire.Domain.Repository.Read;
 using AdminIvoire.Domain.Repository.Write;
+using AdminIvoire.Infrastructure.ApiClient;
 using AdminIvoire.Infrastructure.Persistence;
 using AdminIvoire.Infrastructure.Persistence.Repository;
 using AdminIvoire.Infrastructure.Persistence.Repository.Read;
@@ -94,5 +95,36 @@ public class ServiceExtensionsTests
 
         // Assert
         Assert.Contains(services, x => x.ServiceType == typeof(IGeocodingApiClient));
+    }
+
+    [Fact]
+    public void GivenServiceCollection_WhenAddInfrastructure_ThenAddIOpenStreetMapApiClient()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection([
+                new KeyValuePair<string, string?>("LocaliteContext", "Server=localhost;Port=5432;Database=localite;User Id=postgres;Password=;"),
+                ])
+            .Build();
+
+        // Act
+        services.AddInfrastructure(configuration);
+
+        // Assert
+        Assert.Contains(services, x => x.ServiceType == typeof(IOpenStreetMapApiClient));
+    }
+
+    [Fact]
+    public void GivenServiceCollection_WhenAddOpenStreetMapApiClient_ThenAddIOpenStreetMapApiClient()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+
+        // Act
+        services.AddOpenStreetMapApiClient();
+
+        // Assert
+        Assert.Contains(services, x => x.ServiceType == typeof(IOpenStreetMapApiClient));
     }
 }

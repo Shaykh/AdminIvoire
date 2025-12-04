@@ -11,6 +11,7 @@ public static class ServicesExtensions
     {
         services.AddPersistence(configuration);
         services.AddGeocodingApiClient();
+        services.AddOpenStreetMapApiClient();
 
         return services;
     }
