@@ -12,8 +12,11 @@ services:
         - adminivoire.db
     environment:
         - ASPNETCORE_ENVIRONMENT=Development
-        - ConnectionStrings__LocaliteContext=Host=adminivoire.db;Database=adminivoire;Username=adminivoire;Password=${POSTGRES_PASSWORD};Port=5432
-        - GoogleMaps__ApiKey=${GOOGLEMAPS_APIKEY}
+        - POSTGRES_DB=${POSTGRES_DB:-adminivoire}
+    secrets:
+        - postgres_password
+        - postgres_user
+        - googlemaps_apikey
     networks:
         - adminivoire
 
@@ -22,16 +25,26 @@ services:
     image: postgres
     container_name: adminivoire.db
     restart: always
+    entrypoint: ["/bin/bash", "-c", "export POSTGRES_USER=$$(cat /run/secrets/postgres_user) && export POSTGRES_PASSWORD=$$(cat /run/secrets/postgres_password) && exec /usr/local/bin/docker-entrypoint.sh postgres"]
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+    secrets:
+        - postgres_user
+        - postgres_password
     ports:
         - "5432:5432"
     volumes:
         - adminivoire.db-data:/var/lib/postgresql/data
     networks:
         - adminivoire
+
+secrets:
+    postgres_user:
+        file: ./secrets/postgres_user.txt
+    postgres_password:
+        file: ./secrets/postgres_password.txt
+    googlemaps_apikey:
+        file: ./secrets/googlemaps_apikey.txt
 
 networks:
       adminivoire:

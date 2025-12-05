@@ -365,3 +365,6 @@ FodyWeavers.xsd
 /ConsoleApp1
 /AdminIvoire.WebApi/appsettings.Development.json
 /.env
+
+# Docker secrets
+secrets/

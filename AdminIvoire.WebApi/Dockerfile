@@ -29,8 +29,10 @@ RUN dotnet publish "./AdminIvoire.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app
 
 COPY  wwwroot/Data/localite_data_.csv /app/wwwroot/Data/localite_data_.csv
 
-# Cette phase est utilisée en production ou lors de l’exécution à partir de VS en mode normal (par défaut quand la configuration de débogage n’est pas utilisée)
+# Cette phase est utilisée en production ou lors de l'exécution à partir de VS en mode normal (par défaut quand la configuration de débogage n'est pas utilisée)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "AdminIvoire.WebApi.dll"]
+COPY AdminIvoire.WebApi/docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
