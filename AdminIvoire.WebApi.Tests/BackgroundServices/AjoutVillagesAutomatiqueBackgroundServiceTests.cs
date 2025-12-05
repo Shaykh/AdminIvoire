@@ -49,7 +49,7 @@ public class AjoutVillagesAutomatiqueBackgroundServiceTests
 
         var sousPrefectureReadRepositoryMock = new Mock<ISousPrefectureReadRepository>();
         sousPrefectureReadRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<SousPrefecture>());
+            .ReturnsAsync([]);
 
         var villageWebSourceServiceMock = new Mock<IVillageWebSourceService>();
         var senderMock = new Mock<ISender>();
@@ -108,7 +108,7 @@ public class AjoutVillagesAutomatiqueBackgroundServiceTests
 
         var sousPrefectureReadRepositoryMock = new Mock<ISousPrefectureReadRepository>();
         sousPrefectureReadRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<SousPrefecture> { sousPrefecture });
+            .ReturnsAsync([sousPrefecture]);
 
         var villageWebSourceServiceMock = new Mock<IVillageWebSourceService>();
         villageWebSourceServiceMock.Setup(x => x.GetVillagesAsync(
@@ -116,7 +116,7 @@ public class AjoutVillagesAutomatiqueBackgroundServiceTests
                 It.IsAny<string>(),
                 It.IsAny<string>(),
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<string>()); // Aucun village retourné
+            .ReturnsAsync([]); // Aucun village retourné
 
         var senderMock = new Mock<ISender>();
 
@@ -180,7 +180,7 @@ public class AjoutVillagesAutomatiqueBackgroundServiceTests
 
         var sousPrefectureReadRepositoryMock = new Mock<ISousPrefectureReadRepository>();
         sousPrefectureReadRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<SousPrefecture> { sousPrefecture });
+            .ReturnsAsync([sousPrefecture]);
 
         var villageWebSourceServiceMock = new Mock<IVillageWebSourceService>();
         villageWebSourceServiceMock.Setup(x => x.GetVillagesAsync(
@@ -277,7 +277,7 @@ public class AjoutVillagesAutomatiqueBackgroundServiceTests
 
         var sousPrefectureReadRepositoryMock = new Mock<ISousPrefectureReadRepository>();
         sousPrefectureReadRepositoryMock.Setup(x => x.GetAllAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<SousPrefecture> { sousPrefecture1, sousPrefecture2 });
+            .ReturnsAsync([sousPrefecture1, sousPrefecture2]);
 
         var villageWebSourceServiceMock = new Mock<IVillageWebSourceService>();
         villageWebSourceServiceMock.Setup(x => x.GetVillagesAsync(
@@ -291,7 +291,7 @@ public class AjoutVillagesAutomatiqueBackgroundServiceTests
                 It.IsAny<string>(),
                 It.IsAny<string>(),
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<string> { "Village1" });
+            .ReturnsAsync(["Village1"]);
 
         var senderMock = new Mock<ISender>();
         senderMock.Setup(x => x.Send(It.IsAny<IRequest>(), It.IsAny<CancellationToken>()))

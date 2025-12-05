@@ -8,5 +8,5 @@ public class District : Localite
     /// <summary>
     /// La collection des régions appartenant à ce district
     /// </summary>
-    public ICollection<Region> Regions { get; set; } = new List<Region>();
+    public ICollection<Region> Regions { get; set; } = [];
 }

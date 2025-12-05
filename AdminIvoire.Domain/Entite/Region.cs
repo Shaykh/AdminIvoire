@@ -16,5 +16,5 @@ public class Region : Localite
     /// <summary>
     /// La collection des départements appartenant à cette région
     /// </summary>
-    public ICollection<Departement> Departements { get; set; } = new List<Departement>();
+    public ICollection<Departement> Departements { get; set; } = [];
 }

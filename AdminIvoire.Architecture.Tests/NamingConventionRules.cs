@@ -2,7 +2,6 @@
 using AdminIvoire.Domain.Repository.Read;
 using AdminIvoire.Domain.Repository.Write;
 using FluentValidation;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NetArchTest.Rules;
 

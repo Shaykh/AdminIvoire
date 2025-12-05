@@ -142,7 +142,7 @@ public class VillageWebSourceServiceTests
                 null,
                 null,
                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<string>());
+            .ReturnsAsync([]);
 
         // Act
         var result = await sut.GetVillagesAsync(sousPrefectureNom, cancellationToken: CancellationToken.None);

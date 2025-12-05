@@ -4,7 +4,6 @@ using AdminIvoire.Domain.Repository;
 using AdminIvoire.Domain.Repository.Read;
 using AdminIvoire.Domain.Repository.Write;
 using FluentValidation;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace AdminIvoire.Application.Command;
@@ -51,7 +50,7 @@ public static class AjoutVillagesDeSousPrefecture
             await validator.ValidateAndThrowAsync(request, cancellationToken);
             logger.LogInformation("Ajout de villages à la sous-préfecture {SousPrefectureId}", request.SousPrefectureId);
             var sousPrefecture = await sousPrefectureReadRepository.GetByIdAsync(request.SousPrefectureId, cancellationToken);
-            
+
             var villages = await SetVillagesAsync(request.Villages, sousPrefecture, cancellationToken);
 
             await unitOfWork.CommitAsync(cancellationToken);
