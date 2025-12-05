@@ -23,6 +23,10 @@ public class AjoutVillagesAutomatiqueBackgroundService(
         logger.LogInformation("Fin exécution du service d'ajout automatique des villages");
     }
 
+    /// <summary>
+    /// Ajoute automatiquement les villages pour toutes les sous-préfectures depuis des sources web
+    /// </summary>
+    /// <param name="stoppingToken">Token d'annulation pour arrêter l'opération</param>
     public async Task AjouterVillagesPourToutesSousPrefecturesAsync(CancellationToken stoppingToken)
     {
         using var scope = serviceProvider.CreateScope();

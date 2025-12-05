@@ -4,9 +4,16 @@ using MediatR;
 
 namespace AdminIvoire.WebApi.BackgroundServices;
 
+/// <summary>
+/// Service en arrière-plan pour récupérer les coordonnées géographiques des départements et sous-préfectures
+/// </summary>
 public class RecuperationDonneesGeographiqueBackgroundService(ILogger<RecuperationDonneesGeographiqueBackgroundService> logger,
     IServiceProvider serviceProvider) : BackgroundService
 {
+    /// <summary>
+    /// Exécute le service de récupération des coordonnées géographiques
+    /// </summary>
+    /// <param name="stoppingToken">Token d'annulation pour arrêter le service</param>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         logger.LogInformation("Début exécution du service de lecture des données de localité");
@@ -16,6 +23,10 @@ public class RecuperationDonneesGeographiqueBackgroundService(ILogger<Recuperati
         logger.LogInformation("Fin exécution du service de lecture des données de localité");
     }
 
+    /// <summary>
+    /// Récupère les coordonnées géographiques pour toutes les localités (départements et sous-préfectures)
+    /// </summary>
+    /// <param name="stoppingToken">Token d'annulation pour arrêter l'opération</param>
     public async Task RecupererDonneesGeoLocaliteAsync(CancellationToken stoppingToken)
     {
         using var scope = serviceProvider.CreateScope();
@@ -23,6 +34,11 @@ public class RecuperationDonneesGeographiqueBackgroundService(ILogger<Recuperati
         await RecupererDonneesGeoDeSousPrefecturesAsync(scope, stoppingToken);
     }
 
+    /// <summary>
+    /// Récupère les coordonnées géographiques de toutes les sous-préfectures
+    /// </summary>
+    /// <param name="scope">Le scope de service pour créer les dépendances</param>
+    /// <param name="stoppingToken">Token d'annulation pour arrêter l'opération</param>
     private async Task RecupererDonneesGeoDeSousPrefecturesAsync(IServiceScope scope, CancellationToken stoppingToken)
     {
         var parametrageKey = nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeSousPrefectures);
@@ -42,6 +58,11 @@ public class RecuperationDonneesGeographiqueBackgroundService(ILogger<Recuperati
         }
     }
 
+    /// <summary>
+    /// Récupère les coordonnées géographiques de tous les départements
+    /// </summary>
+    /// <param name="scope">Le scope de service pour créer les dépendances</param>
+    /// <param name="stoppingToken">Token d'annulation pour arrêter l'opération</param>
     private async Task RecupererDonneesGeoDeDepartementsAsync(IServiceScope scope, CancellationToken stoppingToken)
     {
         var parametrageKey = nameof(RecuperationDonneesGeographiqueBackgroundService) + nameof(RecupererCoordonneesGeographiquesDeDepartements);

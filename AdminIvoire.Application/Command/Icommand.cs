@@ -3,14 +3,15 @@
 namespace AdminIvoire.Application.Command;
 
 /// <summary>
-/// Interface presentant une command (CQRS)
+/// Interface présentant une commande (CQRS)
 /// </summary>
 public interface ICommand : IRequest
 {
 }
 /// <summary>
-/// Interface generique presentant une command (CQRS)
+/// Interface générique présentant une commande (CQRS) avec résultat
 /// </summary>
+/// <typeparam name="TResult">Le type du résultat retourné par la commande</typeparam>
 public interface ICommand<out TResult> : IRequest<TResult>
 {
 }

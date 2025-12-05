@@ -8,6 +8,9 @@ using System.Net.Http.Json;
 
 namespace AdminIvoire.Infrastructure.ApiClient;
 
+/// <summary>
+/// Client pour interagir avec l'API Google Geocoding pour récupérer les coordonnées géographiques
+/// </summary>
 public class GoogleGeocodingApiClient(IConfiguration configuration, HttpClient httpClient, ILogger<GoogleGeocodingApiClient> logger) : IGeocodingApiClient
 {
     const string BaseUrlKey = "GoogleMaps:BaseUrl";
@@ -16,6 +19,13 @@ public class GoogleGeocodingApiClient(IConfiguration configuration, HttpClient h
     private readonly HttpClient _httpClient = httpClient;
     private readonly ILogger<GoogleGeocodingApiClient> _logger = logger;
 
+    /// <summary>
+    /// Récupère les coordonnées géographiques (latitude, longitude) d'une localité via l'API Google Geocoding
+    /// </summary>
+    /// <param name="localite">Le nom de la localité pour laquelle récupérer les coordonnées</param>
+    /// <param name="cancellationToken">Token d'annulation pour annuler l'opération asynchrone</param>
+    /// <returns>Les coordonnées géographiques de la localité</returns>
+    /// <exception cref="ApiCallException">Lancée lorsqu'une erreur survient lors de l'appel à l'API</exception>
     public async Task<CoordonneesGeographiques> GetCoordonneesGeographiquesAsync(string localite, CancellationToken cancellationToken)
     {
         string url = FormatGeocodingRequestUrl(localite);
@@ -53,6 +63,12 @@ public class GoogleGeocodingApiClient(IConfiguration configuration, HttpClient h
         }
     }
 
+    /// <summary>
+    /// Formate l'URL de la requête de géocodage pour l'API Google Maps
+    /// </summary>
+    /// <param name="localite">Le nom de la localité</param>
+    /// <returns>L'URL formatée avec les paramètres nécessaires</returns>
+    /// <exception cref="ConfigurationException">Lancée si la clé API ou l'URL de base ne sont pas configurées</exception>
     private string FormatGeocodingRequestUrl(string localite)
     {
         var localitePrecise = $"{localite}, Côte d'Ivoire";

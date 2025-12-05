@@ -9,10 +9,21 @@ using Microsoft.Extensions.Logging;
 
 namespace AdminIvoire.Application.Command;
 
+/// <summary>
+/// Commande pour ajouter des villages à une sous-préfecture
+/// </summary>
 public static class AjoutVillagesDeSousPrefecture
 {
+    /// <summary>
+    /// Commande représentant l'ajout de villages à une sous-préfecture
+    /// </summary>
+    /// <param name="SousPrefectureId">L'identifiant de la sous-préfecture à laquelle ajouter les villages</param>
+    /// <param name="Villages">Le tableau des noms de villages à ajouter</param>
     public record Command(Guid SousPrefectureId, string[] Villages) : ICommand;
 
+    /// <summary>
+    /// Validateur FluentValidation pour la commande d'ajout de villages
+    /// </summary>
     public class Validator : AbstractValidator<Command>
     {
         public Validator()
@@ -30,6 +41,11 @@ public static class AjoutVillagesDeSousPrefecture
         IGeocodingApiClient geocodingApiClient,
         IUnitOfWork unitOfWork) : ICommandHandler<Command>
     {
+        /// <summary>
+        /// Traite la commande d'ajout de villages à une sous-préfecture en récupérant leurs coordonnées géographiques
+        /// </summary>
+        /// <param name="request">La commande contenant l'identifiant de la sous-préfecture et la liste des villages</param>
+        /// <param name="cancellationToken">Token d'annulation pour annuler l'opération asynchrone</param>
         public async Task Handle(Command request, CancellationToken cancellationToken)
         {
             await validator.ValidateAndThrowAsync(request, cancellationToken);
@@ -42,6 +58,13 @@ public static class AjoutVillagesDeSousPrefecture
             logger.LogInformation("{NombreVillages} villages ajoutés à la sous-préfecture {SousPrefectureId}", villages.Count, sousPrefecture.Nom);
         }
 
+        /// <summary>
+        /// Crée et ajoute les villages à la sous-préfecture en récupérant leurs coordonnées géographiques
+        /// </summary>
+        /// <param name="villages">Le tableau des noms de villages à ajouter</param>
+        /// <param name="sousPrefecture">La sous-préfecture à laquelle ajouter les villages</param>
+        /// <param name="cancellationToken">Token d'annulation pour annuler l'opération asynchrone</param>
+        /// <returns>La liste des villages créés</returns>
         private async Task<IList<Village>> SetVillagesAsync(string[] villages, SousPrefecture sousPrefecture, CancellationToken cancellationToken)
         {
             logger.LogDebug("Ajout des villages");

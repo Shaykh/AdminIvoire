@@ -3,9 +3,9 @@
 namespace AdminIvoire.Application.Query;
 
 /// <summary>
-/// Interface presentant une query (CQRS)
+/// Interface présentant une query (CQRS)
 /// </summary>
-/// <typeparam name="TResult"></typeparam>
+/// <typeparam name="TResult">Le type du résultat retourné par la query</typeparam>
 public interface IQuery<out TResult> : IRequest<TResult>
 {
 }

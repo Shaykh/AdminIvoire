@@ -4,8 +4,15 @@ using MediatR;
 
 namespace AdminIvoire.WebApi.Features;
 
+/// <summary>
+/// Module Carter définissant les routes API pour les sous-préfectures
+/// </summary>
 public class SousPrefectureWebModule : ICarterModule
 {
+    /// <summary>
+    /// Ajoute les routes API pour les sous-préfectures
+    /// </summary>
+    /// <param name="app">Le constructeur de routes d'endpoints</param>
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapGet("/api/sousprefectures", async (IMediator mediator) =>

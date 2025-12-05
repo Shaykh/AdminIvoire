@@ -10,6 +10,14 @@ public sealed class VillageWebSourceService(
     IOpenStreetMapApiClient openStreetMapApiClient,
     ILogger<VillageWebSourceService> logger) : IVillageWebSourceService
 {
+    /// <summary>
+    /// Récupère la liste des noms de villages pour une sous-préfecture donnée depuis OpenStreetMap
+    /// </summary>
+    /// <param name="sousPrefectureNom">Le nom de la sous-préfecture</param>
+    /// <param name="departementNom">Le nom du département (optionnel, pour améliorer la précision)</param>
+    /// <param name="regionNom">Le nom de la région (optionnel, pour améliorer la précision)</param>
+    /// <param name="cancellationToken">Token d'annulation</param>
+    /// <returns>Liste des noms de villages, ou une liste vide en cas d'erreur</returns>
     public async Task<IList<string>> GetVillagesAsync(string sousPrefectureNom, string? departementNom = null, string? regionNom = null, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("Récupération des villages pour la sous-préfecture {SousPrefectureNom}", sousPrefectureNom);

@@ -4,10 +4,17 @@ using MediatR;
 
 namespace AdminIvoire.WebApi.Features;
 
+/// <summary>
+/// Module Carter définissant les routes API pour les villages
+/// </summary>
 public class VillageWebModule : ICarterModule
 {
+    /// <summary>
+    /// Ajoute les routes API pour les villages
+    /// </summary>
+    /// <param name="app">Le constructeur de routes d'endpoints</param>
     public void AddRoutes(IEndpointRouteBuilder app)
-    { 
+    {
         app.MapGet("/api/villages", async (IMediator mediator) =>
         {
             var villages = await mediator.Send(new GetAllVillages.Query());

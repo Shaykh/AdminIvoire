@@ -21,6 +21,14 @@ public class OpenStreetMapApiClient(
     private readonly HttpClient _httpClient = httpClient;
     private readonly ILogger<OpenStreetMapApiClient> _logger = logger;
 
+    /// <summary>
+    /// Récupère la liste des noms de villages pour une sous-préfecture depuis OpenStreetMap via Overpass
+    /// </summary>
+    /// <param name="sousPrefectureNom">Le nom de la sous-préfecture</param>
+    /// <param name="departementNom">Le nom du département (optionnel, pour améliorer la précision)</param>
+    /// <param name="regionNom">Le nom de la région (optionnel, pour améliorer la précision)</param>
+    /// <param name="cancellationToken">Token d'annulation</param>
+    /// <returns>Liste des noms de villages, ou une liste vide en cas d'erreur</returns>
     public async Task<IList<string>> GetVillagesAsync(string sousPrefectureNom, string? departementNom = null, string? regionNom = null, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Récupération des villages depuis OpenStreetMap pour la sous-préfecture {SousPrefectureNom}, département {DepartementNom}, région {RegionNom}",
@@ -64,6 +72,13 @@ public class OpenStreetMapApiClient(
         }
     }
 
+    /// <summary>
+    /// Construit une requête Overpass QL pour rechercher les villages d'une sous-préfecture
+    /// </summary>
+    /// <param name="sousPrefectureNom">Le nom de la sous-préfecture</param>
+    /// <param name="departementNom">Le nom du département (optionnel)</param>
+    /// <param name="regionNom">Le nom de la région (optionnel)</param>
+    /// <returns>La requête Overpass QL formatée</returns>
     internal static string BuildOverpassQuery(string sousPrefectureNom, string? departementNom, string? regionNom)
     {
         // Construction de la requête Overpass QL pour rechercher les villages
@@ -102,6 +117,11 @@ public class OpenStreetMapApiClient(
         return queryBuilder.ToString();
     }
 
+    /// <summary>
+    /// Échappe les caractères spéciaux d'une chaîne pour l'utiliser dans une requête Overpass QL
+    /// </summary>
+    /// <param name="input">La chaîne à échapper</param>
+    /// <returns>La chaîne échappée</returns>
     private static string EscapeOverpassString(string input)
     {
         // Échapper les caractères spéciaux pour Overpass QL
@@ -112,6 +132,11 @@ public class OpenStreetMapApiClient(
                     .Replace("\t", "\\t");
     }
 
+    /// <summary>
+    /// Extrait les noms de villages depuis la réponse Overpass
+    /// </summary>
+    /// <param name="response">La réponse Overpass contenant les éléments</param>
+    /// <returns>La liste des noms de villages triés et sans doublons</returns>
     private static List<string> ExtractVillageNames(OverpassResponse response)
     {
         var villageNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
