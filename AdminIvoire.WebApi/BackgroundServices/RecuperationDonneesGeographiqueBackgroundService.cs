@@ -25,14 +25,17 @@ public class RecuperationDonneesGeographiqueBackgroundService(ILogger<Recuperati
 
     /// <summary>
     /// Récupère les coordonnées géographiques pour toutes les localités (départements et sous-préfectures)
+    /// Les deux opérations sont exécutées en parallèle car elles sont indépendantes et utilisent chacune leur propre scope
     /// </summary>
     /// <param name="stoppingToken">Token d'annulation pour arrêter l'opération</param>
     public async Task RecupererDonneesGeoLocaliteAsync(CancellationToken stoppingToken)
     {
-        // Créer un scope séparé pour chaque opération afin d'avoir des DbContext indépendants
-        // Chaque scope utilise le DbContextFactory en arrière-plan pour créer un contexte frais
-        await RecupererDonneesGeoDeDepartementsAsync(stoppingToken);
-        await RecupererDonneesGeoDeSousPrefecturesAsync(stoppingToken);
+        // Exécuter les deux opérations en parallèle car elles sont indépendantes
+        // Chaque méthode crée son propre scope avec un DbContext indépendant depuis la factory
+        await Task.WhenAll(
+            RecupererDonneesGeoDeDepartementsAsync(stoppingToken),
+            RecupererDonneesGeoDeSousPrefecturesAsync(stoppingToken)
+        );
     }
 
     /// <summary>
