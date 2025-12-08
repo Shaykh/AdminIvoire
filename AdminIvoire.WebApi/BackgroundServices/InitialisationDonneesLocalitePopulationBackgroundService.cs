@@ -1,4 +1,4 @@
-﻿using AdminIvoire.Application.Parametrage;
+using AdminIvoire.Application.Parametrage;
 using AdminIvoire.Application.Services;
 using AdminIvoire.Infrastructure.Configuration;
 
@@ -38,18 +38,23 @@ public class InitialisationDonneesLocalitePopulationBackgroundService(ILogger<In
             throw new ConfigurationException("Aucune valeur de chemin du fichier de population n'est configurée");
         }
         var cheminFichierPhysique = GetPhysicalFullPath(cheminFichier);
+
+        // Utilisation d'un scope pour cette opération
+        // Le contexte créé par le scope utilise le DbContextFactory en arrière-plan
         using var scope = serviceProvider.CreateScope();
         var parametrageRepository = scope.ServiceProvider.GetRequiredService<IParametrageRepository>();
+
         if ((await parametrageRepository.GetParametrageAsync(nameof(InitialisationDonneesLocalitePopulationBackgroundService))) is not null)
         {
             logger.LogInformation("La lecture des données de localité depuis le fichier csv a déja  été effectuée.");
             return;
         }
+
         var lectureFichierCsvPopulationService = scope.ServiceProvider.GetRequiredService<ILectureFichierCsvPopulationService>();
         await lectureFichierCsvPopulationService.LireFichierCsvPopulationAsync(cheminFichierPhysique, stoppingToken);
         await parametrageRepository.SetParametrageAsync(
             new ParametrageEntity { Key = nameof(InitialisationDonneesLocalitePopulationBackgroundService), Value = DateTime.Now.ToString() }
-            );
+        );
     }
 
     /// <summary>

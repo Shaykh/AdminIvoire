@@ -2,7 +2,9 @@ using AdminIvoire.Application.Command;
 using AdminIvoire.Application.Parametrage;
 using AdminIvoire.Application.Services;
 using AdminIvoire.Domain.Repository.Read;
+using AdminIvoire.Infrastructure.Persistence;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace AdminIvoire.WebApi.BackgroundServices;
 
@@ -29,35 +31,48 @@ public class AjoutVillagesAutomatiqueBackgroundService(
     /// <param name="stoppingToken">Token d'annulation pour arrêter l'opération</param>
     public async Task AjouterVillagesPourToutesSousPrefecturesAsync(CancellationToken stoppingToken)
     {
-        using var scope = serviceProvider.CreateScope();
-        var parametrageRepository = scope.ServiceProvider.GetRequiredService<IParametrageRepository>();
-        var parametrageKey = nameof(AjoutVillagesAutomatiqueBackgroundService);
-
         // Vérifier si le service a déjà été exécuté
-        if (await parametrageRepository.GetParametrageAsync(parametrageKey) is not null)
+        // Utilisation d'un scope pour cette vérification rapide
+        using (var checkScope = serviceProvider.CreateScope())
         {
-            logger.LogInformation("L'ajout automatique des villages a déjà été effectué.");
-            return;
+            var parametrageRepository = checkScope.ServiceProvider.GetRequiredService<IParametrageRepository>();
+            var parametrageKey = nameof(AjoutVillagesAutomatiqueBackgroundService);
+
+            if (await parametrageRepository.GetParametrageAsync(parametrageKey) is not null)
+            {
+                logger.LogInformation("L'ajout automatique des villages a déjà été effectué.");
+                return;
+            }
         }
 
-        var sousPrefectureReadRepository = scope.ServiceProvider.GetRequiredService<ISousPrefectureReadRepository>();
-        var villageWebSourceService = scope.ServiceProvider.GetRequiredService<IVillageWebSourceService>();
-        var sender = scope.ServiceProvider.GetRequiredService<ISender>();
+        // Récupérer toutes les sous-préfectures dans un scope dédié
+        // Le contexte créé par le scope sera automatiquement disposé après cette opération
+        IList<Domain.Entite.SousPrefecture> sousPrefectures;
+        using (var readScope = serviceProvider.CreateScope())
+        {
+            var sousPrefectureReadRepository = readScope.ServiceProvider.GetRequiredService<ISousPrefectureReadRepository>();
+            sousPrefectures = await sousPrefectureReadRepository.GetAllAsync(stoppingToken);
+        }
 
-        // Récupérer toutes les sous-préfectures
-        var sousPrefectures = await sousPrefectureReadRepository.GetAllAsync(stoppingToken);
         logger.LogInformation("Traitement de {Count} sous-préfectures", sousPrefectures.Count);
 
         var totalVillagesAjoutes = 0;
         var sousPrefecturesTraitees = 0;
         var erreurs = 0;
 
+        // Créer un nouveau scope (et donc un nouveau DbContext) pour chaque itération
+        // Cela évite de garder un DbContext ouvert trop longtemps et réduit les problèmes de tracking
+        // Chaque scope utilise le DbContextFactory en arrière-plan pour créer un contexte frais
         foreach (var sousPrefecture in sousPrefectures)
         {
+            using var iterationScope = serviceProvider.CreateScope();
             try
             {
                 logger.LogInformation("Traitement de la sous-préfecture {SousPrefectureNom} (ID: {Id})",
                     sousPrefecture.Nom, sousPrefecture.Id);
+
+                var villageWebSourceService = iterationScope.ServiceProvider.GetRequiredService<IVillageWebSourceService>();
+                var sender = iterationScope.ServiceProvider.GetRequiredService<ISender>();
 
                 // Récupérer les villages depuis la source web
                 var villages = await villageWebSourceService.GetVillagesAsync(
@@ -76,6 +91,7 @@ public class AjoutVillagesAutomatiqueBackgroundService(
                     villages.Count, sousPrefecture.Nom);
 
                 // Ajouter les villages en utilisant la commande existante
+                // Le handler MediatR créera son propre scope avec un contexte frais depuis la factory
                 var command = new AjoutVillagesDeSousPrefecture.Command(sousPrefecture.Id, villages.ToArray());
                 await sender.Send(command, stoppingToken);
 
@@ -101,13 +117,18 @@ public class AjoutVillagesAutomatiqueBackgroundService(
             "Traitement terminé : {SousPrefecturesTraitees} sous-préfectures traitées, {TotalVillagesAjoutes} villages ajoutés, {Erreurs} erreurs",
             sousPrefecturesTraitees, totalVillagesAjoutes, erreurs);
 
-        // Marquer le service comme exécuté
-        await parametrageRepository.SetParametrageAsync(
-            new ParametrageEntity
-            {
-                Key = parametrageKey,
-                Value = DateTime.Now.ToString()
-            });
+        // Marquer le service comme exécuté dans un scope séparé
+        using (var finalScope = serviceProvider.CreateScope())
+        {
+            var parametrageRepository = finalScope.ServiceProvider.GetRequiredService<IParametrageRepository>();
+            var parametrageKey = nameof(AjoutVillagesAutomatiqueBackgroundService);
+            await parametrageRepository.SetParametrageAsync(
+                new ParametrageEntity
+                {
+                    Key = parametrageKey,
+                    Value = DateTime.Now.ToString()
+                });
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-﻿using AdminIvoire.Application.ApiClient;
+using AdminIvoire.Application.ApiClient;
 using AdminIvoire.Application.Parametrage;
 using AdminIvoire.Domain.Repository;
 using AdminIvoire.Domain.Repository.Read;
@@ -8,6 +8,7 @@ using AdminIvoire.Infrastructure.Persistence;
 using AdminIvoire.Infrastructure.Persistence.Repository;
 using AdminIvoire.Infrastructure.Persistence.Repository.Read;
 using AdminIvoire.Infrastructure.Persistence.Repository.Write;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,7 +31,9 @@ public class ServiceExtensionsTests
         services.AddInfrastructure(configuration);
 
         // Assert
-        Assert.Contains(services, x => x.ServiceType == typeof(LocaliteContext) && x.ImplementationType == typeof(LocaliteContext));
+        // AddDbContextFactory enregistre à la fois LocaliteContext (scoped) et IDbContextFactory<LocaliteContext> (singleton)
+        Assert.Contains(services, x => x.ServiceType == typeof(LocaliteContext));
+        Assert.Contains(services, x => x.ServiceType == typeof(IDbContextFactory<LocaliteContext>));
         Assert.Contains(services, x => x.ServiceType == typeof(IParametrageRepository) && x.ImplementationType == typeof(ParametrageRepository));
         Assert.Contains(services, x => x.ServiceType == typeof(IUnitOfWork) && x.ImplementationType == typeof(UnitOfWork));
     }
